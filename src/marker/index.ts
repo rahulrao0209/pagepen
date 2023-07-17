@@ -55,7 +55,7 @@ export default class Marker {
    * Unmark or remove any marking or annotation from all selections.
    */
   unmarkAll() {
-    // TODO
+    this.#marked.forEach((value, key) => this.unmark(key));
   }
 
   delete() {}

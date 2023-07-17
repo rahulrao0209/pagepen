@@ -42,7 +42,8 @@ button {
   background-color: #fb923c;
 }
 
-#unmark {
+#unmark,
+#unmark-all {
   background-color: #78716c;
 }
 
@@ -54,7 +55,8 @@ button {
   background-color: #f97316;
 }
 
-#unmark:hover {
+#unmark:hover,
+#unmark-all:hover {
   background-color: #57534e;
 }
 

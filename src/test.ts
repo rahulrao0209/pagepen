@@ -9,6 +9,7 @@ let currentMarkedNode: string;
 /** Get dom elements */
 const markButton = document.querySelector("#mark");
 const unmarkButton = document.querySelector("#unmark");
+const unmarkAllButton = document.querySelector("#unmark-all");
 const deleteButton = document.querySelector("#delete");
 
 /** Add event listeners */
@@ -21,6 +22,10 @@ markButton?.addEventListener("click", () => {
 unmarkButton?.addEventListener("click", () => {
   if (!currentMarkedNode) return;
   marker.unmark(currentMarkedNode);
+});
+
+unmarkAllButton?.addEventListener("click", () => {
+  marker.unmarkAll();
 });
 
 document.addEventListener("click", (event: any) => {
