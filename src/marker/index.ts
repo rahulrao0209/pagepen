@@ -1,3 +1,8 @@
+/** Dom update map */
+type DomData = {
+  originals: Node[];
+  fragments: DocumentFragment[];
+};
 export default class Marker {
   #marked = new Map<string, HTMLSpanElement>();
   /**
@@ -33,6 +38,8 @@ export default class Marker {
     const startContainer = range.startContainer;
     const endContainer = range.endContainer;
 
+    const domUpdateMap = new Map<ParentNode, DomData>();
+
     /** Use a tree walker */
     const walker = document.createTreeWalker(
       range.commonAncestorContainer || document,
@@ -40,15 +47,10 @@ export default class Marker {
     );
 
     let currentNode: Node | null = walker.nextNode();
-
     while (currentNode) {
-      console.log(`
-        name: ${currentNode.nodeName}
-        text: ${currentNode.textContent}
-      `);
       if (
         currentNode.nodeType === Node.TEXT_NODE &&
-        (currentNode === startContainer || currentNode === endContainer)
+        range.intersectsNode(currentNode)
       ) {
         const startOffset =
           startContainer === currentNode ? range.startOffset : 0;
@@ -81,12 +83,27 @@ export default class Marker {
           fragment.appendChild(document.createTextNode(succeedingText));
 
         if (currentNode.parentNode) {
-          walker.currentNode = currentNode.parentNode;
-          currentNode.parentNode?.replaceChild(fragment, currentNode);
+          const originals = domUpdateMap.get(currentNode.parentNode)?.originals;
+          const fragments = domUpdateMap.get(currentNode.parentNode)?.fragments;
+
+          domUpdateMap.set(currentNode.parentNode, {
+            originals: originals ? [...originals, currentNode] : [currentNode],
+            fragments: fragments ? [...fragments, fragment] : [fragment],
+          });
         }
       }
       currentNode = walker.nextNode();
     }
+
+    this.updateDOM(domUpdateMap);
+  }
+
+  updateDOM(map: Map<ParentNode, DomData>) {
+    map.forEach((value: DomData, key: ParentNode) => {
+      value.originals.forEach((original: Node, index: number) => {
+        key.replaceChild(value.fragments[index], original);
+      });
+    });
   }
 
   /**
