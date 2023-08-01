@@ -1,46 +1,75 @@
-/** Dom update map */
-type DomData = {
-  originals: Node[];
-  fragments: DocumentFragment[];
-};
+import type { DomData } from "../types";
 export default class Marker {
-  #marked = new Map<string, HTMLSpanElement>();
+  #marked = new Map<string, HTMLSpanElement[]>();
   /**
    * Mark or highlight a text selection on the webpage.
    * @param {Selection} node
-   * @param {string} feature
+   * @param {string[]} features
    */
   mark(
     node: Selection,
-    feature: string = "highlight",
+    features: string[] = ["highlight"],
     uid: string = Date.now().toString()
-  ) {
-    /** Get the range and extract its contents. */
+  ): void {
+    /** Get the range. */
     const range = node.getRangeAt(0);
-    const content = range.cloneContents();
 
-    if (range.startContainer === range.endContainer) {
-      /** Delete the range. */
-      range.deleteContents();
+    /** Mark the selection using the range */
+    if (range.startContainer === range.endContainer)
+      this.#handleSingleNode(range, uid, features);
+    else this.#handleNestedNodes(range, uid, features);
 
-      /** Append a new node with the range content */
-      const replacement = document.createElement("span");
-      replacement.append(content);
-      replacement.id = uid;
-      replacement.classList.add(feature, "cursor-pointer");
-      this.#marked.set(uid, replacement);
-      range.insertNode(replacement);
-      node.collapseToEnd();
-    } else this.walkTree(range);
+    /** Collapse the selection to the end */
+    node.collapseToEnd();
   }
 
-  walkTree(range: Range) {
+  #saveMarkedNode(uid: string, node: HTMLSpanElement) {
+    const nodesWithUid = this.#marked.get(uid);
+    if (nodesWithUid && nodesWithUid.length > 0) {
+      this.#marked.set(uid, [...nodesWithUid, node]);
+    } else this.#marked.set(uid, [node]);
+  }
+
+  /**
+   * Mark / Highlight a single text node
+   * @param {Range} range
+   * @param {string} uid
+   * @param {string[]} features
+   */
+  #handleSingleNode(range: Range, uid: string, features: string[]): void {
+    /** Get and store range contents */
+    const content = range.cloneContents();
+
+    /** Delete range contents. */
+    range.deleteContents();
+
+    /** Append a new node with the range content */
+    const span = document.createElement("span");
+    span.append(content);
+    span.dataset.id = uid;
+    span.classList.add(...features);
+    this.#saveMarkedNode(uid, span);
+    range.insertNode(span);
+  }
+
+  /**
+   * Mark / Highlight a range with nested nodes.
+   * @param {Range} range
+   * @param {string} uid
+   * @param {string} features
+   */
+  #handleNestedNodes(range: Range, uid: string, features: string[]): void {
     const startContainer = range.startContainer;
     const endContainer = range.endContainer;
 
+    /**
+     *  Initialize a map to store the parent node and the corresponding
+     *  DomData which consists of the original child nodes as well as the
+     *  fragments which will be used as a replacement.
+     */
     const domUpdateMap = new Map<ParentNode, DomData>();
 
-    /** Use a tree walker */
+    /** Initialize a tree walker */
     const walker = document.createTreeWalker(
       range.commonAncestorContainer || document,
       NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT
@@ -70,8 +99,10 @@ export default class Marker {
           .trim();
 
         const span = document.createElement("span");
-        span.classList.add("highlight");
+        span.dataset.id = uid;
+        span.classList.add(...features);
         span.textContent = selectedText || "";
+        this.#saveMarkedNode(uid, span);
 
         const fragment = document.createDocumentFragment();
         if (precedingText)
@@ -95,10 +126,14 @@ export default class Marker {
       currentNode = walker.nextNode();
     }
 
-    this.updateDOM(domUpdateMap);
+    this.#updateDOM(domUpdateMap);
   }
 
-  updateDOM(map: Map<ParentNode, DomData>) {
+  /**
+   * Updates the DOM by replacing the child elements.
+   * @param {Map<ParentNode, DomData>} map
+   */
+  #updateDOM(map: Map<ParentNode, DomData>): void {
     map.forEach((value: DomData, key: ParentNode) => {
       value.originals.forEach((original: Node, index: number) => {
         key.replaceChild(value.fragments[index], original);
@@ -112,21 +147,25 @@ export default class Marker {
    * @returns {void}
    */
   unmark(id: string): void {
-    /** Check if the node we want to unmark is marked. */
-    if (!this.#marked.has(id)) return;
-    const markedNode = this.#marked.get(id);
+    /** Check if the node/nodes we want to unmark are marked. */
+    const markedNodes = this.#marked.get(id);
+    if (markedNodes && markedNodes.length === 0) return;
 
-    if (!markedNode) return;
     /**
-     * If we have a marked node, create a range to extract its contents
+     * If we have marked nodes, create a range to extract its contents
      * as a document fragment.
      */
     const range = new Range();
-    range.selectNodeContents(markedNode);
-    const fragment = range.extractContents();
 
-    /** Replace the marked node with the fragment. */
-    markedNode.parentNode?.replaceChild(fragment, markedNode);
+    markedNodes?.forEach((node: HTMLSpanElement) => {
+      range.selectNodeContents(node);
+      const fragment = range.extractContents();
+
+      /** Replace the marked node with the fragment. */
+      node.parentNode?.replaceChild(fragment, node);
+    });
+
+    /** Finally delete the id from the map */
     this.#marked.delete(id);
   }
 
