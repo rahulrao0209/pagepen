@@ -5,18 +5,18 @@ const marker = new Marker();
 const selections: Selection[] = [];
 let currentSelection: Selection;
 let currentMarkedNode: string;
+const styles = ["highlight", "cursor-pointer"];
 
 /** Get dom elements */
 const markButton = document.querySelector("#mark");
 const unmarkButton = document.querySelector("#unmark");
 const unmarkAllButton = document.querySelector("#unmark-all");
-const deleteButton = document.querySelector("#delete");
 
 /** Add event listeners */
 markButton?.addEventListener("click", () => {
   const timestamp = Date.now();
   currentSelection &&
-    marker.mark(currentSelection, "highlight", timestamp.toString());
+    marker.mark(currentSelection, styles, timestamp.toString());
 });
 
 unmarkButton?.addEventListener("click", () => {
@@ -29,8 +29,7 @@ unmarkAllButton?.addEventListener("click", () => {
 });
 
 document.addEventListener("click", (event: any) => {
-  currentMarkedNode = event.target.id;
-  console.log(currentMarkedNode);
+  currentMarkedNode = event.target.dataset.id;
 });
 
 const handleSelection = function () {
