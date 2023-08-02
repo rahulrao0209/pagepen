@@ -23,6 +23,11 @@ export default class Marker {
     node.collapseToEnd();
   }
 
+  /**
+   * Save marked node(s) for a given uid.
+   * @param {string} uid
+   * @param {HTMLSpanElement} node
+   */
   #saveMarkedNode(uid: string, node: HTMLSpanElement) {
     const nodesWithUid = this.#marked.get(uid);
     if (nodesWithUid && nodesWithUid.length > 0) {
@@ -139,6 +144,46 @@ export default class Marker {
         key.replaceChild(value.fragments[index], original);
       });
     });
+  }
+
+  /**
+   * Displays all the marked nodes.
+   * @param {string} id
+   * @returns {void}
+   */
+  #displayMarkings(id: string): void {
+    const markedNodes = this.#marked.get(id);
+    if (markedNodes && markedNodes.length === 0) return;
+
+    markedNodes?.forEach((node: HTMLSpanElement) => {
+      node.classList.add("highlight", "cursor-pointer");
+    });
+  }
+
+  /**
+   * Hides all the marked nodes
+   * @param {string} id
+   * @returns {void}
+   */
+  #hideMarkings(id: string): void {
+    const markedNodes = this.#marked.get(id);
+    if (markedNodes && markedNodes.length === 0) return;
+
+    markedNodes?.forEach((node: HTMLSpanElement) => {
+      node.className = "";
+    });
+  }
+
+  /**
+   * Toggles the visibility of the markings/annotations
+   * @param {boolean} on
+   * @returns {void}
+   */
+  toggleMarkerVisibility(on: boolean): void {
+    if (this.#marked.size < 0) return;
+
+    if (on) this.#marked.forEach((_, key) => this.#displayMarkings(key));
+    else this.#marked.forEach((_, key) => this.#hideMarkings(key));
   }
 
   /**

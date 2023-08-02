@@ -11,6 +11,8 @@ const styles = ["highlight", "cursor-pointer"];
 const markButton = document.querySelector("#mark");
 const unmarkButton = document.querySelector("#unmark");
 const unmarkAllButton = document.querySelector("#unmark-all");
+const hideMarkingButton = document.querySelector("#hide-marking");
+const showMarkingButton = document.querySelector("#show-marking");
 
 /** Add event listeners */
 markButton?.addEventListener("click", () => {
@@ -26,6 +28,14 @@ unmarkButton?.addEventListener("click", () => {
 
 unmarkAllButton?.addEventListener("click", () => {
   marker.unmarkAll();
+});
+
+hideMarkingButton?.addEventListener("click", () => {
+  marker.toggleMarkerVisibility(false);
+});
+
+showMarkingButton?.addEventListener("click", () => {
+  marker.toggleMarkerVisibility(true);
 });
 
 document.addEventListener("click", (event: any) => {

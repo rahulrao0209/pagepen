@@ -52,8 +52,15 @@ button {
   background-color: #78716c;
 }
 
-#delete {
-  background-color: #f87171;
+#hide-marking {
+}
+
+#show-marking {
+  background-color: #0d9488;
+}
+
+#hide-marking {
+  background-color: #737373;
 }
 
 #mark:hover {
@@ -65,8 +72,12 @@ button {
   background-color: #57534e;
 }
 
-#delete:hover {
-  background-color: #ef4444;
+#show-marking:hover {
+  background-color: #047857;
+}
+
+#hide-marking:hover {
+  background-color: #404040;
 }
 
 button:active {
