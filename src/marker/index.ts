@@ -16,11 +16,58 @@ export default class Marker {
 
     /** Mark the selection using the range */
     if (range.startContainer === range.endContainer)
-      this.#handleSingleNode(range, uid, features);
-    else this.#handleNestedNodes(range, uid, features);
+      this.#handleTextRange(range, uid, features);
+    else this.#handleNodeRange(range, uid, features);
 
     /** Collapse the selection to the end */
     node.collapseToEnd();
+  }
+
+  /**
+   * Unmark a marked node on the webpage.
+   * @param {string} id of the node to be unmarked.
+   * @returns {void}
+   */
+  unmark(id: string): void {
+    /** Check if the node/nodes we want to unmark are marked. */
+    const markedNodes = this.#marked.get(id);
+    if (markedNodes && markedNodes.length === 0) return;
+
+    /**
+     * If we have marked nodes, create a range to extract its contents
+     * as a document fragment.
+     */
+    const range = new Range();
+
+    markedNodes?.forEach((node: HTMLSpanElement) => {
+      range.selectNodeContents(node);
+      const fragment = range.extractContents();
+
+      /** Replace the marked node with the fragment. */
+      node.parentNode?.replaceChild(fragment, node);
+    });
+
+    /** Finally delete the id from the map */
+    this.#marked.delete(id);
+  }
+
+  /**
+   * Unmark or remove any marking or annotation from all selections.
+   */
+  unmarkAll() {
+    this.#marked.forEach((_, key) => this.unmark(key));
+  }
+
+  /**
+   * Toggles the visibility of the markings/annotations
+   * @param {boolean} on
+   * @returns {void}
+   */
+  toggleMarkerVisibility(on: boolean): void {
+    if (this.#marked.size < 0) return;
+
+    if (on) this.#marked.forEach((_, key) => this.#displayMarkings(key));
+    else this.#marked.forEach((_, key) => this.#hideMarkings(key));
   }
 
   /**
@@ -36,12 +83,12 @@ export default class Marker {
   }
 
   /**
-   * Mark / Highlight a single text node
+   * Handles range containing a single text node.
    * @param {Range} range
    * @param {string} uid
    * @param {string[]} features
    */
-  #handleSingleNode(range: Range, uid: string, features: string[]): void {
+  #handleTextRange(range: Range, uid: string, features: string[]): void {
     /** Get and store range contents */
     const content = range.cloneContents();
 
@@ -58,12 +105,12 @@ export default class Marker {
   }
 
   /**
-   * Mark / Highlight a range with nested nodes.
+   * Handles range containing element nodes.
    * @param {Range} range
    * @param {string} uid
    * @param {string} features
    */
-  #handleNestedNodes(range: Range, uid: string, features: string[]): void {
+  #handleNodeRange(range: Range, uid: string, features: string[]): void {
     const startContainer = range.startContainer;
     const endContainer = range.endContainer;
 
@@ -173,53 +220,4 @@ export default class Marker {
       node.className = "";
     });
   }
-
-  /**
-   * Toggles the visibility of the markings/annotations
-   * @param {boolean} on
-   * @returns {void}
-   */
-  toggleMarkerVisibility(on: boolean): void {
-    if (this.#marked.size < 0) return;
-
-    if (on) this.#marked.forEach((_, key) => this.#displayMarkings(key));
-    else this.#marked.forEach((_, key) => this.#hideMarkings(key));
-  }
-
-  /**
-   * Unmark a marked node on the webpage.
-   * @param {string} id of the node to be unmarked.
-   * @returns {void}
-   */
-  unmark(id: string): void {
-    /** Check if the node/nodes we want to unmark are marked. */
-    const markedNodes = this.#marked.get(id);
-    if (markedNodes && markedNodes.length === 0) return;
-
-    /**
-     * If we have marked nodes, create a range to extract its contents
-     * as a document fragment.
-     */
-    const range = new Range();
-
-    markedNodes?.forEach((node: HTMLSpanElement) => {
-      range.selectNodeContents(node);
-      const fragment = range.extractContents();
-
-      /** Replace the marked node with the fragment. */
-      node.parentNode?.replaceChild(fragment, node);
-    });
-
-    /** Finally delete the id from the map */
-    this.#marked.delete(id);
-  }
-
-  /**
-   * Unmark or remove any marking or annotation from all selections.
-   */
-  unmarkAll() {
-    this.#marked.forEach((_, key) => this.unmark(key));
-  }
-
-  delete() {}
 }
