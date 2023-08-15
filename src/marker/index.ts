@@ -1,4 +1,6 @@
-import type { DomData } from "../types";
+import type { DomData, RangeData } from "../types";
+import { calculateXPath, getNodeByXPath } from "../path/";
+
 export default class Marker {
   #marked = new Map<string, HTMLSpanElement[]>();
   /**
@@ -13,6 +15,9 @@ export default class Marker {
   ): void {
     /** Get the range. */
     const range = node.getRangeAt(0);
+
+    /** Save the xpaths for range nodes */
+    this.#saveXPaths(range, uid);
 
     /** Mark the selection using the range */
     if (range.startContainer === range.endContainer)
@@ -68,6 +73,57 @@ export default class Marker {
 
     if (on) this.#marked.forEach((_, key) => this.#displayMarkings(key));
     else this.#marked.forEach((_, key) => this.#hideMarkings(key));
+  }
+
+  retrieveSavedAnnotations() {
+    const local = localStorage;
+    for (let i = 0; i < local.length; i++) {
+      const key = local.key(i);
+      if (!key) continue;
+      const localObj = local.getItem(key);
+      if (!localObj) continue;
+      const rangeData: RangeData = JSON.parse(localObj);
+      this.#applySavedAnnotations(rangeData);
+    }
+  }
+
+  #handleRange(range: Range, uid: string, features: string[]) {
+    /** Mark the selection using the range */
+    if (range.startContainer === range.endContainer)
+      this.#handleTextRange(range, uid, features);
+    else this.#handleNodeRange(range, uid, features);
+  }
+
+  #saveXPaths(range: Range, uid: string) {
+    /** Test xpaths */
+    const xpathStart = calculateXPath(range.startContainer);
+    const xpathEnd = calculateXPath(range.endContainer);
+    const startOff = range.startOffset;
+    const endOff = range.endOffset;
+
+    /** Save XPaths in Local storage */
+    const rangeData: RangeData = {
+      xpathStart,
+      xpathEnd,
+      startOff,
+      endOff,
+      uid,
+    };
+
+    localStorage.setItem(uid, JSON.stringify(rangeData));
+  }
+
+  #applySavedAnnotations(rangeData: RangeData) {
+    const { xpathStart, xpathEnd, startOff, endOff, uid } = rangeData;
+
+    if (xpathStart && xpathEnd) {
+      const startNode = getNodeByXPath(xpathStart);
+      const endNode = getNodeByXPath(xpathEnd);
+      const newRange = document.createRange();
+      if (startNode) newRange.setStart(startNode, startOff);
+      if (endNode) newRange.setEnd(endNode, endOff);
+      this.#handleRange(newRange, uid, ["highlight", "cursor-pointer"]);
+    }
   }
 
   /**

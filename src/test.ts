@@ -42,6 +42,10 @@ document.addEventListener("click", (event: any) => {
   currentMarkedNode = event.target.dataset.id;
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  marker.retrieveSavedAnnotations();
+});
+
 const handleSelection = function () {
   const selection = document.getSelection();
 
