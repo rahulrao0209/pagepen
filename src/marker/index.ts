@@ -17,7 +17,7 @@ export default class Marker {
     const range = node.getRangeAt(0);
 
     /** Save the xpaths for range nodes */
-    this.#saveXPaths(range, uid);
+    this.#saveAnnotations(range, uid);
 
     /** Mark the selection using the range */
     if (range.startContainer === range.endContainer)
@@ -54,6 +54,9 @@ export default class Marker {
 
     /** Finally delete the id from the map */
     this.#marked.delete(id);
+
+    /** Remove the annotation from the storage */
+    this.#removeAnnotation(id);
   }
 
   /**
@@ -94,8 +97,8 @@ export default class Marker {
     else this.#handleNodeRange(range, uid, features);
   }
 
-  #saveXPaths(range: Range, uid: string) {
-    /** Test xpaths */
+  #saveAnnotations(range: Range, uid: string) {
+    /** Calculate xpaths */
     const xpathStart = calculateXPath(range.startContainer);
     const xpathEnd = calculateXPath(range.endContainer);
     const startOff = range.startOffset;
@@ -111,6 +114,10 @@ export default class Marker {
     };
 
     localStorage.setItem(uid, JSON.stringify(rangeData));
+  }
+
+  #removeAnnotation(uid: string) {
+    localStorage.removeItem(uid);
   }
 
   #applySavedAnnotations(rangeData: RangeData) {
