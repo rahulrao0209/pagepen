@@ -1,4 +1,4 @@
-import { Marker } from ".";
+import Marker from "./marker";
 
 const marker = new Marker();
 
