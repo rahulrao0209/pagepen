@@ -6,12 +6,6 @@
     "author": "Rahul Rao",
     "action": {
       "default_title": "Pagepen",
-      "default_popup": "/src/chrome/popup/popup.html"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["/src/chrome/scripts/contentScript.ts"]
-      }
-    ]
-  }
+      "default_popup": "index.html"
+    }
+}

@@ -1,9 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    mode: "development",
-    entry: './src/index.tsx',
+    mode: 'development',
+    target: 'web',
+    entry: {
+        popup: './src/index.tsx',
+    },
     module: {
         rules: [
             {
@@ -19,7 +23,7 @@ module.exports = {
                 test: /\.(js|ts)x?$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: "babel-loader",
+                  loader: 'babel-loader',
                   options: {
                     presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
                   }
@@ -29,12 +33,19 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/index.html"
+            template: './src/popup.html'
         }),
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: path.resolve('manifest.json'),
+                to: path.resolve('dist')
+            }]
+        })
     ],
     devServer: {
         static: './dist',
     },
+    devtool: 'cheap-module-source-map',
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
     },
