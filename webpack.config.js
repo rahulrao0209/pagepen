@@ -6,7 +6,9 @@ module.exports = {
     mode: 'development',
     target: 'web',
     entry: {
-        popup: './src/index.tsx',
+        popup: './src/ui/index.tsx',
+        contentScript: './src/contentScripts/index.ts',
+        background: './src/backgroundScripts/index.ts'
     },
     module: {
         rules: [
@@ -33,7 +35,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/popup.html'
+            template: './src/index.html'
         }),
         new CopyWebpackPlugin({
             patterns: [{
@@ -50,7 +52,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js'],
     },
     output: {
-        filename: '[name].[contenthash].js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
     },
