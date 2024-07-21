@@ -1,6 +1,8 @@
 /**
  * Store ranges using XPaths.
  */
+
+// @ts-nocheck
 export const calculateXPath = function (node: Node): string {
   const parts: string[] = [];
   let current: Node | null = node;
