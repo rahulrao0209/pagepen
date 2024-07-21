@@ -8,7 +8,7 @@ module.exports = {
     entry: {
         popup: './src/ui/index.tsx',
         contentScript: './src/contentScripts/index.ts',
-        background: './src/backgroundScripts/index.ts'
+        background: './src/backgroundScripts/index.ts',
     },
     module: {
         rules: [
@@ -25,24 +25,31 @@ module.exports = {
                 test: /\.(js|ts)x?$/,
                 exclude: /node_modules/,
                 use: {
-                  loader: 'babel-loader',
-                  options: {
-                    presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript']
-                  }
-                }
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-env',
+                            '@babel/preset-react',
+                            '@babel/preset-typescript',
+                        ],
+                    },
+                },
             },
         ],
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html'
+            template: './src/index.html',
+            excludeChunks: ['contentScript.js'],
         }),
         new CopyWebpackPlugin({
-            patterns: [{
-                from: path.resolve('manifest.json'),
-                to: path.resolve('dist')
-            }]
-        })
+            patterns: [
+                {
+                    from: path.resolve('manifest.json'),
+                    to: path.resolve('dist'),
+                },
+            ],
+        }),
     ],
     devServer: {
         static: './dist',
@@ -58,15 +65,14 @@ module.exports = {
     },
     optimization: {
         moduleIds: 'deterministic',
-        runtimeChunk: 'single',
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 vendor: {
                     test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
                     chunks: 'all',
-                }
-            }
-        }
-    }
+                },
+            },
+        },
+    },
 };
