@@ -1,98 +1,20 @@
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: inherit;
-}
-
-body {
-  box-sizing: border-box;
-  font-family: "Inter", sans-serif;
-}
-
-.container {
-  margin: 0 auto;
-  padding: 6rem;
-  line-height: 1.5;
-  font-size: 1.25rem;
-}
-
-/* Basic styling for the controls */
-.controls {
-  display: flex;
-  flex-flow: row nowrap;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-b {
-  font-weight: bold;
-  color: green;
-}
-
-button {
-  border: none;
-  padding: 1rem 1.6rem;
-  border-radius: 8px;
-  font-weight: bold;
-  width: 8rem;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 6px 12px;
-  transition: all 0.2s ease;
-}
-
-#mark {
-  background-color: #fb923c;
-}
-
-#unmark,
-#unmark-all {
-  background-color: #78716c;
-}
-
-/* #hide-marking {
-} */
-
-#show-marking {
-  background-color: #0d9488;
-}
-
-#hide-marking {
-  background-color: #737373;
-}
-
-#mark:hover {
-  background-color: #f97316;
-}
-
-#unmark:hover,
-#unmark-all:hover {
-  background-color: #57534e;
-}
-
-#show-marking:hover {
-  background-color: #047857;
-}
-
-#hide-marking:hover {
-  background-color: #404040;
-}
-
-button:active {
-  box-shadow: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
 }
 
 /* Text manipulation styles */
 .highlight {
-  background-color: #fed7aa;
-  text-decoration: underline;
-  text-decoration-color: #d97706;
-  text-decoration-thickness: 2px;
-  padding: 2px;
+    background-color: #fed7aa;
+    text-decoration: underline;
+    text-decoration-color: #d97706;
+    text-decoration-thickness: 2px;
+    padding: 2px;
 }
 
 .cursor-pointer {
-  cursor: pointer;
+    cursor: pointer;
 }

@@ -7,7 +7,7 @@ module.exports = {
     target: 'web',
     entry: {
         popup: './src/ui/index.tsx',
-        contentScript: './src/contentScripts/index.ts',
+        contentScript: './src/contentScripts/index.tsx',
         background: './src/backgroundScripts/index.ts',
     },
     module: {
@@ -65,14 +65,14 @@ module.exports = {
     },
     optimization: {
         moduleIds: 'deterministic',
-        splitChunks: {
-            chunks: 'all',
-            cacheGroups: {
-                vendor: {
-                    test: /[\\/]node_modules[\\/]/,
-                    chunks: 'all',
-                },
-            },
-        },
+        // splitChunks: {
+        //     chunks: 'all',
+        //     cacheGroups: {
+        //         vendor: {
+        //             test: /[\\/]node_modules[\\/]/,
+        //             chunks: 'all',
+        //         },
+        //     },
+        // },
     },
 };
