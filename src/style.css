@@ -6,13 +6,35 @@
     box-sizing: inherit;
 }
 
+:root {
+    /* Colors for highlighting. */
+    --color-yellow: #fee440;
+    --color-orange: #fed7aa;
+    --color-pink: #ffb3c6;
+    --color-green: #81b29a;
+}
+
 /* Text manipulation styles */
-.highlight {
-    background-color: #fed7aa;
-    text-decoration: underline;
+
+/* text-decoration: underline;
     text-decoration-color: #d97706;
     text-decoration-thickness: 2px;
-    padding: 2px;
+    padding: 2px; */
+
+.highlight-orange {
+    background-color: var(--color-orange);
+}
+
+.highlight-yellow {
+    background-color: var(--color-yellow);
+}
+
+.highlight-pink {
+    background-color: var(--color-pink);
+}
+
+.highlight-green {
+    background-color: var(--color-green);
 }
 
 .cursor-pointer {

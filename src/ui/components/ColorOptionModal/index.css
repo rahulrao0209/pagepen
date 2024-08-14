@@ -1,10 +1,43 @@
 .color-option-modal {
-    color: green;
-    z-index: 100;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    z-index: 100;
     font-size: 2.5rem;
     font-weight: bold;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 8px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 100vw;
+    transition: transform 0.2s;
+}
+
+.color-option:hover {
+    transform: scale(1.05);
+}
+
+.yellow {
+    background-color: var(--color-yellow);
+}
+
+.orange {
+    background-color: var(--color-orange);
+}
+
+.pink {
+    background-color: var(--color-pink);
+}
+
+.green {
+    background-color: var(--color-green);
 }
