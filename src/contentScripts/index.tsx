@@ -31,13 +31,30 @@ const getHighlightStyles = (color: string) => {
 
 const App = () => {
     const [selection, setSelection] = useState<Range>();
-    const [showModal, setShowModal] = useState(false);
+    const [modal, setModal] = useState({
+        show: false,
+        top: 0,
+        left: 0,
+    });
+
+    const findSelectionCoordinates = (range: Range) => {
+        const rect = range.getBoundingClientRect();
+        setModal({
+            show: true,
+            top: rect.bottom + window.scrollY + 25,
+            left: rect.right + window.scrollX + 25,
+        });
+    };
 
     const captureSelection = (_event: MouseEvent) => {
         const currentSelection = document.getSelection();
         if (currentSelection && currentSelection.toString().length > 0) {
-            setShowModal(true);
-            setSelection(currentSelection.getRangeAt(0));
+            const range = currentSelection.getRangeAt(0);
+            setSelection(range);
+            findSelectionCoordinates(range);
+        } else {
+            // If no text selection is present, hide the modal.
+            setTimeout(() => setModal({ ...modal, show: false }), 0);
         }
     };
 
@@ -49,15 +66,22 @@ const App = () => {
                 getHighlightStyles(color),
                 timestamp.toString()
             );
+        setModal({
+            ...modal,
+            show: false,
+        });
     };
 
     useEffect(() => {
         document.addEventListener('mouseup', captureSelection);
-        return () => document.removeEventListener('mouseup', captureSelection);
+
+        return () => {
+            document.removeEventListener('mouseup', captureSelection);
+        };
     }, []);
 
-    return showModal ? (
-        <ColorOptionModal highlight={highlight} setShowModal={setShowModal} />
+    return modal.show ? (
+        <ColorOptionModal highlight={highlight} modal={modal} />
     ) : null;
 };
 

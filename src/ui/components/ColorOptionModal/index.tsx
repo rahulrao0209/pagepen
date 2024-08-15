@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 
 const HIGHLIGHTER_COLORS = {
@@ -9,21 +9,33 @@ const HIGHLIGHTER_COLORS = {
 };
 
 type ColorOptionModalProps = {
+    modal: {
+        show: boolean;
+        top: number;
+        left: number;
+    };
     highlight: (color: string) => void;
-    setShowModal: any;
 };
 
-const ColorOptionModal = ({
-    highlight,
-    setShowModal,
-}: ColorOptionModalProps) => {
-    const handleHighlight = (event) => {
-        highlight(event.target.dataset.color);
-        setShowModal(false);
+const ColorOptionModal = ({ highlight, modal }: ColorOptionModalProps) => {
+    const handleHighlight = (event: React.MouseEvent<HTMLSpanElement>) => {
+        const target = event.target as HTMLSpanElement;
+        const color = target.dataset.color;
+        if (!color) return;
+        highlight(color);
+    };
+
+    const modalPosition = {
+        top: modal.top,
+        left: modal.left,
     };
 
     return (
-        <div className="color-option-modal" onClick={handleHighlight}>
+        <div
+            className="color-option-modal"
+            onClick={handleHighlight}
+            style={modalPosition}
+        >
             <span
                 className="color-option yellow"
                 data-color={HIGHLIGHTER_COLORS.yellow}
