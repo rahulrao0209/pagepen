@@ -38,11 +38,13 @@ const App = () => {
     });
 
     const findSelectionCoordinates = (range: Range) => {
-        const rect = range.getBoundingClientRect();
+        const rects = range.getClientRects();
+        if (rects.length === 0) return;
+        const endRect = rects[rects.length - 1];
         setModal({
             show: true,
-            top: rect.bottom + window.scrollY + 25,
-            left: rect.right + window.scrollX + 25,
+            top: endRect.bottom + window.scrollY,
+            left: endRect.right + window.scrollX,
         });
     };
 
@@ -87,7 +89,7 @@ const App = () => {
 
 const domNode = document.createElement('div');
 domNode.id = 'react-root';
-document.body.prepend(domNode);
+document.body.append(domNode);
 const container = document.getElementById('react-root');
 const root = createRoot(container);
 root.render(<App />);
