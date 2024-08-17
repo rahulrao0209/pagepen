@@ -1,11 +1,3 @@
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-}
-
 :root {
     /* Colors for highlighting. */
     --color-yellow: #fee440;
@@ -15,12 +7,6 @@
 }
 
 /* Text manipulation styles */
-
-/* text-decoration: underline;
-    text-decoration-color: #d97706;
-    text-decoration-thickness: 2px;
-    padding: 2px; */
-
 .highlight-orange {
     background-color: var(--color-orange);
 }

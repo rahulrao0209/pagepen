@@ -3,7 +3,7 @@ import './index.css';
 
 const Popup = () => {
     return (
-        <div>
+        <div className="popup">
             <h1>Pagepen popup</h1>
         </div>
     );

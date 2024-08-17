@@ -1,12 +1,4 @@
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: inherit;
-}
-
-body {
+.popup {
     box-sizing: border-box;
     padding: 20px;
 }
