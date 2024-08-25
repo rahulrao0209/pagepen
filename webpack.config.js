@@ -6,9 +6,9 @@ module.exports = {
     mode: 'development',
     target: 'web',
     entry: {
-        popup: './src/ui/index.tsx',
         contentScript: './src/contentScripts/index.tsx',
         background: './src/backgroundScripts/index.ts',
+        sidepanel: './src/ui/index.tsx',
     },
     module: {
         rules: [
@@ -39,7 +39,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html',
+            template: './src/sidepanel.html',
+            filename: 'sidepanel.html',
             excludeChunks: ['contentScript.js'],
         }),
         new CopyWebpackPlugin({
