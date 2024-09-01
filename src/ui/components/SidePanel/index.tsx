@@ -1,8 +1,9 @@
 import React from 'react';
+import './index.css';
 
 const SidePanel = () => {
     return (
-        <aside className="side-panel">
+        <aside className="sidepanel">
             <h1>Pagepen</h1>
             <p>Welcome to Pagepen</p>
         </aside>
