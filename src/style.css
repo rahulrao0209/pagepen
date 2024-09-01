@@ -4,6 +4,11 @@
     --color-orange: #fed7aa;
     --color-pink: #ffb3c6;
     --color-green: #81b29a;
+
+    /* Generic colors */
+    --color-white: #fff;
+    --color-mauve-11: #65636d;
+    --color-blue-10: #0588f0;
 }
 
 /* Text manipulation styles */
@@ -25,4 +30,8 @@
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+span[class*='highlight-']:hover {
+    outline: 2px solid var(--color-blue-10);
 }

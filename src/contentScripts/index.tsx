@@ -1,7 +1,7 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ColorOptionModal } from '../ui/components';
+import { ColorOptionModal, CreateToolbar } from '../ui/components';
 import Marker from '../marker';
 import '../style.css';
 
@@ -83,7 +83,8 @@ const App = () => {
     }, []);
 
     return modal.show ? (
-        <ColorOptionModal highlight={highlight} modal={modal} />
+        // <ColorOptionModal highlight={highlight} modal={modal} />
+        <CreateToolbar highlight={highlight} modal={modal} />
     ) : null;
 };
 

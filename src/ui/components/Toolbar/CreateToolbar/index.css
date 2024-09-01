@@ -1,0 +1,39 @@
+.create-toolbar {
+    position: absolute;
+    z-index: 1000;
+    font-weight: bold;
+    transform: translate(-50%, 2px);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.highlighter-btn:hover,
+.make-note-btn:hover,
+.choose-color-btn:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.highlighter-btn,
+.make-note-btn {
+    width: 28px;
+    height: 28px;
+    color: var(--color-mauve-11);
+}
+
+.choose-color-btn {
+    background-color: var(--color-yellow); /* Will be dynamic.*/
+    border-radius: 100vw;
+    width: 24px;
+    height: 24px;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+}

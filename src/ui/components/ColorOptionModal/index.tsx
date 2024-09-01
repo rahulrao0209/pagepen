@@ -1,12 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { HIGHLIGHTER_COLORS } from '../../constants';
 import './index.css';
-
-const HIGHLIGHTER_COLORS = {
-    yellow: 'yellow',
-    orange: 'orange',
-    pink: 'pink',
-    green: 'green',
-};
 
 type ColorOptionModalProps = {
     modal: {
