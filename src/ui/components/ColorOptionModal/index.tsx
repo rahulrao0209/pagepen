@@ -18,8 +18,8 @@ type ColorOptionModalProps = {
 };
 
 const ColorOptionModal = ({ highlight, modal }: ColorOptionModalProps) => {
-    const handleHighlight = (event: React.MouseEvent<HTMLSpanElement>) => {
-        const target = event.target as HTMLSpanElement;
+    const handleHighlight = (event: React.MouseEvent<HTMLElement>) => {
+        const target = event.target as HTMLElement;
         const color = target.dataset.color;
         if (!color) return;
         highlight(color);
@@ -33,23 +33,28 @@ const ColorOptionModal = ({ highlight, modal }: ColorOptionModalProps) => {
     return (
         <div
             className="color-option-modal"
+            aria-role="dialog"
             onClick={handleHighlight}
             style={modalPosition}
         >
             <span
                 className="color-option yellow"
+                aria-role="button"
                 data-color={HIGHLIGHTER_COLORS.yellow}
             ></span>
             <span
                 className="color-option orange"
+                aria-role="button"
                 data-color={HIGHLIGHTER_COLORS.orange}
             ></span>
             <span
                 className="color-option pink"
+                aria-role="button"
                 data-color={HIGHLIGHTER_COLORS.pink}
             ></span>
             <span
                 className="color-option green"
+                aria-role="button"
                 data-color={HIGHLIGHTER_COLORS.green}
             ></span>
         </div>
