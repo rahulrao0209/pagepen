@@ -203,15 +203,20 @@ export default class Marker {
                         ? range.endOffset
                         : currentNode.textContent?.length;
 
-                const selectedText = currentNode.textContent
-                    ?.slice(startOffset, endOffset)
-                    .trim();
-                const precedingText = currentNode.textContent
-                    ?.slice(0, startOffset)
-                    .trim();
-                const succeedingText = currentNode.textContent
-                    ?.slice(endOffset, currentNode.textContent.length)
-                    .trim();
+                const selectedText = currentNode.textContent?.slice(
+                    startOffset,
+                    endOffset
+                );
+
+                const precedingText = currentNode.textContent?.slice(
+                    0,
+                    startOffset
+                );
+
+                const succeedingText = currentNode.textContent?.slice(
+                    endOffset,
+                    currentNode.textContent.length
+                );
 
                 const span = document.createElement('span');
                 span.dataset.id = uid;
