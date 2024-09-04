@@ -33,7 +33,8 @@
     height: 24px;
 }
 
-svg {
+.highlighter-btn > svg,
+.make-note-btn > svg {
     width: 100%;
     height: 100%;
 }
