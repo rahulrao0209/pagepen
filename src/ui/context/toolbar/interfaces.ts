@@ -1,9 +1,12 @@
 export enum ToolbarActions {
-    DISPLAY_CREATE,
-    DISPLAY_UPDATE,
-    DISPLAY_COLORS,
-    HIDE_CREATE,
-    HIDE_UPDATE,
+    CREATE,
+    UPDATE,
+}
+
+export interface ToolbarPayload {
+    show: boolean;
+    top?: number;
+    left?: number;
 }
 
 export interface ToolbarState {
@@ -17,17 +20,11 @@ export interface ToolbarState {
         top: number;
         left: number;
     };
-    colors: {
-        show: boolean;
-        top: number;
-        left: number;
-    };
 }
 
 export interface ToolbarMethods {
-    dispatchCreate: () => void;
-    dispatchUpdate: () => void;
-    dispatchColors: () => void;
+    dispatchCreate: (payload: ToolbarPayload) => void;
+    dispatchUpdate: (payload: ToolbarPayload) => void;
 }
 
 export interface ToolbarContext {
@@ -37,9 +34,5 @@ export interface ToolbarContext {
 
 export interface ToolbarAction {
     type: ToolbarActions;
-    payload: {
-        show: boolean;
-        top?: number;
-        left?: number;
-    };
+    payload: ToolbarPayload;
 }

@@ -1,7 +1,9 @@
 /** Decides which toolbar needs to be shown. */
 import React, { createContext, PropsWithChildren, useReducer } from 'react';
 import {
+    ToolbarActions,
     ToolbarContext as ToolbarContextType,
+    ToolbarPayload,
     ToolbarState,
 } from './interfaces';
 import toolbarReducer from './reducer';
@@ -17,11 +19,6 @@ const initialState: ToolbarState = {
         top: 0,
         left: 0,
     },
-    colors: {
-        show: false,
-        top: 0,
-        left: 0,
-    },
 };
 
 export const ToolbarContext = createContext<ToolbarContextType>(null);
@@ -29,16 +26,25 @@ export const ToolbarContext = createContext<ToolbarContextType>(null);
 export const ToolbarContextProvider = (props: PropsWithChildren) => {
     const [state, dispatch] = useReducer(toolbarReducer, initialState);
 
-    const dispatchCreate = () => {};
-    const dispatchUpdate = () => {};
-    const dispatchColors = () => {};
+    const dispatchCreate = (payload: ToolbarPayload) => {
+        dispatch({
+            type: ToolbarActions.CREATE,
+            payload,
+        });
+    };
+
+    const dispatchUpdate = (payload: ToolbarPayload) => {
+        dispatch({
+            type: ToolbarActions.UPDATE,
+            payload,
+        });
+    };
 
     const providerData: ToolbarContextType = {
         state,
         methods: {
             dispatchCreate,
             dispatchUpdate,
-            dispatchColors,
         },
     };
 

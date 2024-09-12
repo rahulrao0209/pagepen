@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import { ColorOptionModal } from '../../';
+import { ToolbarContext, ColorContext } from '../../../context';
 import { MessageIcon, HighlightIcon } from '../../../icons';
+import {
+    HIGHLIGHTER_COLOR_CODES,
+    HIGHLIGHTER_COLORS,
+} from '../../../constants';
 import './index.css';
-import { HIGHLIGHTER_COLORS } from '../../../constants';
+import { restoreSelection } from '../../../utils';
 
 type CreateToolbarProps = {
     modal: {
@@ -9,14 +15,17 @@ type CreateToolbarProps = {
         top: number;
         left: number;
     };
-    highlight: (color: string) => void;
+    highlight: (color: HIGHLIGHTER_COLORS) => void;
+    range: Range;
 };
 
-const CreateToolbar = ({ highlight, modal }: CreateToolbarProps) => {
-    const handleHighlight = (event: React.MouseEvent<HTMLElement>) => {
-        const target = event.target as HTMLElement;
-        const color = target.dataset.color;
-        console.log('color: ', color);
+const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
+    const [showColorOptions, setShowColorOptions] = useState(false);
+    const colorContext = useContext(ColorContext);
+
+    const { color } = colorContext;
+
+    const handleHighlight = (color: HIGHLIGHTER_COLORS) => {
         if (!color) return;
         highlight(color);
     };
@@ -26,35 +35,48 @@ const CreateToolbar = ({ highlight, modal }: CreateToolbarProps) => {
         left: modal.left,
     };
 
+    const displayColorOptions = (event: any) => {
+        restoreSelection(range);
+        setShowColorOptions(true);
+    };
+
     return (
-        <div
-            className="create-toolbar"
-            style={modalPosition}
-            onClick={handleHighlight}
-        >
-            <span
-                aria-label="Make note"
-                role="button"
-                className="make-note-btn"
-                data-color={HIGHLIGHTER_COLORS.yellow}
-            >
-                <MessageIcon data-color={HIGHLIGHTER_COLORS.yellow} />
-            </span>
-            <span
-                aria-label="Highlighter"
-                role="button"
-                className="highlighter-btn"
-                data-color={HIGHLIGHTER_COLORS.yellow}
-            >
-                <HighlightIcon data-color={HIGHLIGHTER_COLORS.yellow} />
-            </span>
-            <span
-                aria-label="Choose color"
-                role="button"
-                className="choose-color-btn"
-                data-color={HIGHLIGHTER_COLORS.yellow}
-            ></span>
-        </div>
+        <>
+            {showColorOptions ? (
+                <ColorOptionModal
+                    modal={{
+                        show: true,
+                        top: modal.top - 60,
+                        left: modal.left,
+                    }}
+                />
+            ) : null}
+            <div className="create-toolbar" style={modalPosition}>
+                <span
+                    aria-label="Make note"
+                    role="button"
+                    className="make-note-btn"
+                    onClick={() => handleHighlight(color)}
+                >
+                    <MessageIcon data-color={HIGHLIGHTER_COLORS.YELLOW} />
+                </span>
+                <span
+                    aria-label="Highlighter"
+                    role="button"
+                    className="highlighter-btn"
+                    onClick={() => handleHighlight(color)}
+                >
+                    <HighlightIcon data-color={HIGHLIGHTER_COLORS.YELLOW} />
+                </span>
+                <span
+                    aria-label="Choose color"
+                    role="button"
+                    className="choose-color-btn"
+                    onClick={displayColorOptions}
+                    style={{ backgroundColor: HIGHLIGHTER_COLOR_CODES[color] }}
+                ></span>
+            </div>
+        </>
     );
 };
 

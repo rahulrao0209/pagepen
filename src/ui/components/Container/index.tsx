@@ -1,66 +1,60 @@
 /** Script for listening for text selections */
-import React, { useState, useEffect } from 'react';
-import { ColorOptionModal, CreateToolbar } from '../';
+import React, { useState, useEffect, useContext } from 'react';
+import { CreateToolbar, UpdateToolbar } from '../';
+import { ColorContext, ToolbarContext } from '../../context';
 import Marker from '../../../marker';
+import {
+    getHighlightStyles,
+    restoreSelection,
+    shouldCloseToolbar,
+} from '../../utils';
 import '../../../style.css';
-// import '../style.css';
+import { HIGHLIGHTER_COLORS } from '../../constants';
 
 const marker = new Marker();
 
-const getHighlightStyles = (color: string) => {
-    const styles = ['cursor-pointer'];
-    switch (color) {
-        case 'yellow':
-            styles.push('highlight-yellow');
-            break;
-        case 'orange':
-            styles.push('highlight-orange');
-            break;
-        case 'pink':
-            styles.push('highlight-pink');
-            break;
-        case 'green':
-            styles.push('highlight-green');
-            break;
-        default:
-            styles.push('highlight-orange');
-    }
-
-    return styles;
-};
+// A list of css classes of elements that should not close the toolbar when clicked.
+const KEEP_TOOLBAR_OPEN = ['color-option', 'choose-color-btn'];
 
 const Container = () => {
     const [selection, setSelection] = useState<Range>();
-    const [modal, setModal] = useState({
-        show: false,
-        top: 0,
-        left: 0,
-    });
+
+    const toolbarContext = useContext(ToolbarContext);
+    const colorContext = useContext(ColorContext);
+    const { state, methods } = toolbarContext;
 
     const findSelectionCoordinates = (range: Range) => {
         const rects = range.getClientRects();
         if (rects.length === 0) return;
         const endRect = rects[rects.length - 1];
-        setModal({
+
+        return {
             show: true,
             top: endRect.bottom + window.scrollY,
             left: endRect.right + window.scrollX,
-        });
+        };
     };
 
-    const captureSelection = (_event: MouseEvent) => {
+    const captureSelection = (event: MouseEvent) => {
         const currentSelection = document.getSelection();
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
             setSelection(range);
-            findSelectionCoordinates(range);
+            const toolbarData = findSelectionCoordinates(range);
+            methods.dispatchCreate(toolbarData);
         } else {
-            // If no text selection is present, hide the modal.
-            setTimeout(() => setModal({ ...modal, show: false }), 0);
+            const target = event.target as HTMLSpanElement;
+            if (!shouldCloseToolbar(KEEP_TOOLBAR_OPEN, target.classList)) {
+                return;
+            }
+            setTimeout(() => {
+                methods.dispatchCreate({ show: false });
+                setSelection(null);
+            }, 0);
         }
     };
 
-    const highlight = (color: string) => {
+    const highlight = (color: HIGHLIGHTER_COLORS) => {
         const timestamp = Date.now();
         selection?.toString().length > 0 &&
             marker.mark(
@@ -68,8 +62,7 @@ const Container = () => {
                 getHighlightStyles(color),
                 timestamp.toString()
             );
-        setModal({
-            ...modal,
+        methods.dispatchCreate({
             show: false,
         });
     };
@@ -82,10 +75,22 @@ const Container = () => {
         };
     }, []);
 
-    return modal.show ? (
-        // <ColorOptionModal highlight={highlight} modal={modal} />
-        <CreateToolbar highlight={highlight} modal={modal} />
-    ) : null;
+    useEffect(() => {
+        if (selection) restoreSelection(selection);
+    }, [colorContext.color]);
+
+    return (
+        <>
+            {state.create.show ? (
+                <CreateToolbar
+                    highlight={highlight}
+                    modal={state.create}
+                    range={selection}
+                />
+            ) : null}
+            {state.update.show ? <UpdateToolbar /> : null}
+        </>
+    );
 };
 
 export default Container;
