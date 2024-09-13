@@ -24,6 +24,11 @@
     transform: scale(1.05);
 }
 
+.color-option:active,
+.color-option:focus {
+    transform: scale(0.9);
+}
+
 .yellow {
     background-color: var(--color-yellow);
 }

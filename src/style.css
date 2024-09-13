@@ -35,3 +35,7 @@
 span[class*='highlight-']:hover {
     outline: 2px solid var(--color-blue-10);
 }
+
+::selection {
+    background-color: #ccc;
+}
