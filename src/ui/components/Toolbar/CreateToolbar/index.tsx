@@ -58,7 +58,7 @@ const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
                     className="make-note-btn"
                     onClick={() => handleHighlight(color)}
                 >
-                    <MessageIcon data-color={HIGHLIGHTER_COLORS.YELLOW} />
+                    <MessageIcon />
                 </span>
                 <span
                     aria-label="Highlighter"
@@ -66,7 +66,7 @@ const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
                     className="highlighter-btn"
                     onClick={() => handleHighlight(color)}
                 >
-                    <HighlightIcon data-color={HIGHLIGHTER_COLORS.YELLOW} />
+                    <HighlightIcon />
                 </span>
                 <span
                     aria-label="Choose color"
