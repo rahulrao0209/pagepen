@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { HIGHLIGHTER_COLORS } from '../../../constants';
 import { MessageReplyIcon, DeleteIcon } from '../../../icons';
 import './index.css';
+import { ToolbarContext } from '../../../context';
+import Marker from '../../../../marker';
 
 interface UpdateToolbarProps {
-    toolbarData: {
-        show: boolean;
-        top: number;
-        left: number;
-    };
-    deleteHighlight: () => void;
+    marker: Marker;
+    id: string;
 }
 
-const UpdateToolbar = ({
-    toolbarData,
-    deleteHighlight,
-}: UpdateToolbarProps) => {
-    const { top, left } = toolbarData;
+const UpdateToolbar = ({ marker, id }: UpdateToolbarProps) => {
+    const { state, methods } = useContext(ToolbarContext);
+    const { top, left } = state.update;
     const toolbarPosition = { top, left };
+
+    const deleteHighlight = (id: string) => {
+        marker.unmark(id);
+        methods.dispatchUpdate({ show: false });
+    };
 
     return (
         <>
@@ -42,7 +43,7 @@ const UpdateToolbar = ({
                     aria-label="Delete higlight"
                     role="button"
                     className="delete-btn"
-                    onClick={deleteHighlight}
+                    onClick={() => deleteHighlight(id)}
                 >
                     <DeleteIcon />
                 </span>

@@ -7,32 +7,34 @@ import {
     HIGHLIGHTER_COLORS,
 } from '../../../constants';
 import './index.css';
-import { restoreSelection } from '../../../utils';
+import { getHighlightStyles, restoreSelection } from '../../../utils';
+import Marker from '../../../../marker';
 
 type CreateToolbarProps = {
-    modal: {
-        show: boolean;
-        top: number;
-        left: number;
-    };
-    highlight: (color: HIGHLIGHTER_COLORS) => void;
+    marker: Marker;
     range: Range;
 };
 
-const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
+const CreateToolbar = ({ marker, range }: CreateToolbarProps) => {
     const [showColorOptions, setShowColorOptions] = useState(false);
     const colorContext = useContext(ColorContext);
+    const toolbarContext = useContext(ToolbarContext);
 
     const { color } = colorContext;
+    const { state, methods } = toolbarContext;
 
-    const handleHighlight = (color: HIGHLIGHTER_COLORS) => {
-        if (!color) return;
-        highlight(color);
+    const toolbarPosition = {
+        top: state.create.top,
+        left: state.create.left,
     };
 
-    const modalPosition = {
-        top: modal.top,
-        left: modal.left,
+    const highlight = (color: HIGHLIGHTER_COLORS) => {
+        const timestamp = Date.now();
+        range?.toString().length > 0 &&
+            marker.mark(range, getHighlightStyles(color), timestamp.toString());
+        methods.dispatchCreate({
+            show: false,
+        });
     };
 
     const displayColorOptions = (_event: any) => {
@@ -46,17 +48,17 @@ const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
                 <ColorOptionModal
                     modal={{
                         show: true,
-                        top: modal.top - 60,
-                        left: modal.left,
+                        top: toolbarPosition.top - 60,
+                        left: toolbarPosition.left,
                     }}
                 />
             ) : null}
-            <div className="create-toolbar" style={modalPosition}>
+            <div className="create-toolbar" style={toolbarPosition}>
                 <span
                     aria-label="Make note"
                     role="button"
                     className="make-note-btn"
-                    onClick={() => handleHighlight(color)}
+                    onClick={() => highlight(color)}
                 >
                     <MessageIcon />
                 </span>
@@ -64,7 +66,7 @@ const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
                     aria-label="Highlighter"
                     role="button"
                     className="highlighter-btn"
-                    onClick={() => handleHighlight(color)}
+                    onClick={() => highlight(color)}
                 >
                     <HighlightIcon />
                 </span>

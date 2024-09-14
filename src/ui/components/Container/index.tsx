@@ -4,13 +4,26 @@ import { CreateToolbar, UpdateToolbar } from '../';
 import { ColorContext, ToolbarContext } from '../../context';
 import Marker from '../../../marker';
 import {
-    getHighlightStyles,
+    getPosition,
     isHighlighted,
     restoreSelection,
     shouldCloseToolbar,
 } from '../../utils';
 import '../../../style.css';
-import { HIGHLIGHTER_COLORS } from '../../constants';
+
+enum ToolbarType {
+    CREATE,
+    UPDATE,
+}
+
+type DisplayToolbar = {
+    type: ToolbarType;
+    show: boolean;
+    positionData?: {
+        top: number;
+        left: number;
+    };
+};
 
 const marker = new Marker();
 
@@ -25,16 +38,28 @@ const Container = () => {
     const colorContext = useContext(ColorContext);
     const { state, methods } = toolbarContext;
 
-    const findSelectionCoordinates = (range: Range | HTMLElement) => {
-        const rects = range.getClientRects();
-        if (rects.length === 0) return;
-        const endRect = rects[rects.length - 1];
+    const handleToolbarDisplay = ({
+        type,
+        show,
+        positionData,
+    }: DisplayToolbar) => {
+        const { dispatchCreate, dispatchUpdate } = methods;
 
-        return {
-            show: true,
-            top: endRect.bottom + window.scrollY,
-            left: endRect.right + window.scrollX,
-        };
+        if (type === ToolbarType.CREATE) {
+            if (positionData)
+                setTimeout(() => dispatchCreate({ show, ...positionData }), 0);
+            else
+                setTimeout(() => {
+                    dispatchCreate({ show });
+                    setSelection(null);
+                }, 0);
+        }
+
+        if (type === ToolbarType.UPDATE) {
+            if (positionData)
+                setTimeout(() => dispatchUpdate({ show, ...positionData }), 0);
+            else setTimeout(() => dispatchUpdate({ show }), 0);
+        }
     };
 
     const captureSelection = (event: MouseEvent) => {
@@ -42,8 +67,13 @@ const Container = () => {
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
             setSelection(range);
-            const toolbarData = findSelectionCoordinates(range);
-            methods.dispatchCreate(toolbarData);
+            const positionData = getPosition(range);
+            // Show create toolbar.
+            handleToolbarDisplay({
+                type: ToolbarType.CREATE,
+                show: true,
+                positionData,
+            });
         } else {
             const target = event.target as HTMLSpanElement;
             if (!shouldCloseToolbar(KEEP_TOOLBAR_OPEN, target.classList)) {
@@ -51,37 +81,28 @@ const Container = () => {
             }
 
             if (isHighlighted(target)) {
-                console.log(target);
-                const toolbarData = findSelectionCoordinates(target);
+                const positionData = getPosition(target);
                 setHighlightId(target.dataset.id);
-                setTimeout(() => methods.dispatchUpdate(toolbarData), 0);
+                // Show update toolbar.
+                handleToolbarDisplay({
+                    type: ToolbarType.UPDATE,
+                    show: true,
+                    positionData,
+                });
                 return;
             }
 
-            setTimeout(() => methods.dispatchUpdate({ show: false }), 0);
-            setTimeout(() => {
-                methods.dispatchCreate({ show: false });
-                setSelection(null);
-            }, 0);
+            // Hide both toolbars.
+            handleToolbarDisplay({
+                type: ToolbarType.UPDATE,
+                show: false,
+            });
+
+            handleToolbarDisplay({
+                type: ToolbarType.CREATE,
+                show: false,
+            });
         }
-    };
-
-    const highlight = (color: HIGHLIGHTER_COLORS) => {
-        const timestamp = Date.now();
-        selection?.toString().length > 0 &&
-            marker.mark(
-                selection,
-                getHighlightStyles(color),
-                timestamp.toString()
-            );
-        methods.dispatchCreate({
-            show: false,
-        });
-    };
-
-    const deleteHighlight = () => {
-        marker.unmark(highlightId);
-        methods.dispatchUpdate({ show: false });
     };
 
     useEffect(() => {
@@ -99,17 +120,10 @@ const Container = () => {
     return (
         <>
             {state.create.show ? (
-                <CreateToolbar
-                    highlight={highlight}
-                    modal={state.create}
-                    range={selection}
-                />
+                <CreateToolbar marker={marker} range={selection} />
             ) : null}
             {state.update.show ? (
-                <UpdateToolbar
-                    toolbarData={state.update}
-                    deleteHighlight={deleteHighlight}
-                />
+                <UpdateToolbar marker={marker} id={highlightId} />
             ) : null}
         </>
     );

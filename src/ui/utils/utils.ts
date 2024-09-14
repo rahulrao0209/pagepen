@@ -1,5 +1,9 @@
 import { HIGHLIGHTER_COLORS } from '../constants';
 
+type HasRects = {
+    getClientRects: () => DOMRectList;
+};
+
 export const getHighlightStyles = (color: HIGHLIGHTER_COLORS) => {
     const styles = ['cursor-pointer'];
 
@@ -40,4 +44,15 @@ export const restoreSelection = (range: Range) => {
     const selection = document.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
+};
+
+export const getPosition = (obj: HasRects) => {
+    const rects = obj.getClientRects();
+    if (rects.length === 0) return;
+    const endRect = rects[rects.length - 1];
+
+    return {
+        top: endRect.bottom + window.scrollY,
+        left: endRect.right + window.scrollX,
+    };
 };
