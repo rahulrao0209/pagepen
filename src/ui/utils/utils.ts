@@ -30,6 +30,12 @@ export const shouldCloseToolbar = (list: string[], classList: DOMTokenList) => {
     return true;
 };
 
+export const isHighlighted = (element: HTMLSpanElement) => {
+    const isSpan = element.nodeName.toLowerCase() === 'span';
+    const isHighlighted = element?.className?.search(/highlight-/) !== -1;
+    return isSpan && isHighlighted ? true : false;
+};
+
 export const restoreSelection = (range: Range) => {
     const selection = document.getSelection();
     selection.removeAllRanges();

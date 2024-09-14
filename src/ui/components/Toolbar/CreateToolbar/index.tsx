@@ -35,9 +35,9 @@ const CreateToolbar = ({ highlight, modal, range }: CreateToolbarProps) => {
         left: modal.left,
     };
 
-    const displayColorOptions = (event: any) => {
+    const displayColorOptions = (_event: any) => {
         restoreSelection(range);
-        setShowColorOptions(true);
+        setShowColorOptions((prevOption) => !prevOption);
     };
 
     return (

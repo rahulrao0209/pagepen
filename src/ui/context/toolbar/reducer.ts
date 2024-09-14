@@ -4,6 +4,7 @@ const toolbarReducer = (
     state: ToolbarState,
     action: ToolbarAction
 ): ToolbarState => {
+    console.log(action);
     switch (action.type) {
         case ToolbarActions.CREATE:
             return {
@@ -16,6 +17,7 @@ const toolbarReducer = (
                 },
                 update: {
                     ...state.update,
+                    show: false,
                 },
             };
         case ToolbarActions.UPDATE:
@@ -23,6 +25,7 @@ const toolbarReducer = (
                 ...state,
                 create: {
                     ...state.create,
+                    show: false,
                 },
                 update: {
                     ...state.update,

@@ -5,6 +5,7 @@ import { ColorContext, ToolbarContext } from '../../context';
 import Marker from '../../../marker';
 import {
     getHighlightStyles,
+    isHighlighted,
     restoreSelection,
     shouldCloseToolbar,
 } from '../../utils';
@@ -18,12 +19,13 @@ const KEEP_TOOLBAR_OPEN = ['color-option', 'choose-color-btn'];
 
 const Container = () => {
     const [selection, setSelection] = useState<Range>();
+    const [highlightId, setHighlightId] = useState<string>();
 
     const toolbarContext = useContext(ToolbarContext);
     const colorContext = useContext(ColorContext);
     const { state, methods } = toolbarContext;
 
-    const findSelectionCoordinates = (range: Range) => {
+    const findSelectionCoordinates = (range: Range | HTMLElement) => {
         const rects = range.getClientRects();
         if (rects.length === 0) return;
         const endRect = rects[rects.length - 1];
@@ -47,6 +49,16 @@ const Container = () => {
             if (!shouldCloseToolbar(KEEP_TOOLBAR_OPEN, target.classList)) {
                 return;
             }
+
+            if (isHighlighted(target)) {
+                console.log(target);
+                const toolbarData = findSelectionCoordinates(target);
+                setHighlightId(target.dataset.id);
+                setTimeout(() => methods.dispatchUpdate(toolbarData), 0);
+                return;
+            }
+
+            setTimeout(() => methods.dispatchUpdate({ show: false }), 0);
             setTimeout(() => {
                 methods.dispatchCreate({ show: false });
                 setSelection(null);
@@ -65,6 +77,11 @@ const Container = () => {
         methods.dispatchCreate({
             show: false,
         });
+    };
+
+    const deleteHighlight = () => {
+        marker.unmark(highlightId);
+        methods.dispatchUpdate({ show: false });
     };
 
     useEffect(() => {
@@ -88,7 +105,12 @@ const Container = () => {
                     range={selection}
                 />
             ) : null}
-            {state.update.show ? <UpdateToolbar /> : null}
+            {state.update.show ? (
+                <UpdateToolbar
+                    toolbarData={state.update}
+                    deleteHighlight={deleteHighlight}
+                />
+            ) : null}
         </>
     );
 };
