@@ -4,7 +4,6 @@ const toolbarReducer = (
     state: ToolbarState,
     action: ToolbarAction
 ): ToolbarState => {
-    console.log(action);
     switch (action.type) {
         case ToolbarActions.CREATE:
             return {

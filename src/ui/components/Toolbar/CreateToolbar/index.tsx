@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useColorOptions } from '../hooks';
 import { ColorOptionModal } from '../../';
 import { ToolbarContext, ColorContext } from '../../../context';
 import { MessageIcon, HighlightIcon } from '../../../icons';
@@ -16,12 +17,13 @@ type CreateToolbarProps = {
 };
 
 const CreateToolbar = ({ marker, range }: CreateToolbarProps) => {
-    const [showColorOptions, setShowColorOptions] = useState(false);
     const colorContext = useContext(ColorContext);
     const toolbarContext = useContext(ToolbarContext);
+    const colorOptions = useColorOptions();
 
     const { color } = colorContext;
     const { state, methods } = toolbarContext;
+    const { showColorOptions, toggleColorOptions } = colorOptions;
 
     const toolbarPosition = {
         top: state.create.top,
@@ -37,10 +39,9 @@ const CreateToolbar = ({ marker, range }: CreateToolbarProps) => {
         });
     };
 
-    const displayColorOptions = (_event: any) => {
-        restoreSelection(range);
-        setShowColorOptions((prevOption) => !prevOption);
-    };
+    useEffect(() => {
+        if (range) restoreSelection(range);
+    }, [colorContext.color]);
 
     return (
         <>
@@ -74,7 +75,7 @@ const CreateToolbar = ({ marker, range }: CreateToolbarProps) => {
                     aria-label="Choose color"
                     role="button"
                     className="choose-color-btn"
-                    onClick={displayColorOptions}
+                    onClick={() => toggleColorOptions(range)}
                     style={{ backgroundColor: HIGHLIGHTER_COLOR_CODES[color] }}
                 ></span>
             </div>

@@ -1,14 +1,9 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect, useContext } from 'react';
 import { CreateToolbar, UpdateToolbar } from '../';
-import { ColorContext, ToolbarContext } from '../../context';
+import { ToolbarContext } from '../../context';
 import Marker from '../../../marker';
-import {
-    getPosition,
-    isHighlighted,
-    restoreSelection,
-    shouldCloseToolbar,
-} from '../../utils';
+import { getPosition, isHighlighted, shouldCloseToolbar } from '../../utils';
 import '../../../style.css';
 
 enum ToolbarType {
@@ -35,7 +30,6 @@ const Container = () => {
     const [highlightId, setHighlightId] = useState<string>();
 
     const toolbarContext = useContext(ToolbarContext);
-    const colorContext = useContext(ColorContext);
     const { state, methods } = toolbarContext;
 
     const handleToolbarDisplay = ({
@@ -112,10 +106,6 @@ const Container = () => {
             document.removeEventListener('mouseup', captureSelection);
         };
     }, []);
-
-    useEffect(() => {
-        if (selection) restoreSelection(selection);
-    }, [colorContext.color]);
 
     return (
         <>
