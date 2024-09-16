@@ -30,13 +30,16 @@ const UpdateToolbar = ({ marker, id }: UpdateToolbarProps) => {
 
     // Update the highlighted node's color when a new color is chosen.
     useEffect(() => {
-        const node = document.querySelector(`[data-id="${id}"]`);
-        if (!node) return;
-        node.classList.forEach((classname: string) => {
-            if (classname.includes('highlight-')) {
-                node.classList.remove(classname);
-                node.classList.add(`highlight-${color.toLowerCase()}`);
-            }
+        const nodes = document.querySelectorAll(`[data-id="${id}"]`);
+        if (!nodes.length) return;
+
+        nodes.forEach((node) => {
+            node.classList.forEach((classname: string) => {
+                if (classname.includes('highlight-')) {
+                    node.classList.remove(classname);
+                    node.classList.add(`highlight-${color.toLowerCase()}`);
+                }
+            });
         });
     }, [color]);
 
