@@ -3,7 +3,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { CreateToolbar, UpdateToolbar } from '../';
 import { ToolbarContext } from '../../context';
 import Marker from '../../../marker';
-import { getPosition, isHighlighted, shouldCloseToolbar } from '../../utils';
+import {
+    getMouseClickPosition,
+    getRangeEndPosition,
+    isHighlighted,
+    shouldCloseToolbar,
+} from '../../utils';
 import '../../../style.css';
 
 enum ToolbarType {
@@ -61,7 +66,7 @@ const Container = () => {
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
             setSelection(range);
-            const positionData = getPosition(range);
+            const positionData = getRangeEndPosition(range);
             // Show create toolbar.
             handleToolbarDisplay({
                 type: ToolbarType.CREATE,
@@ -75,7 +80,7 @@ const Container = () => {
             }
 
             if (isHighlighted(target)) {
-                const positionData = getPosition(target);
+                const positionData = getMouseClickPosition(event);
                 setHighlightId(target.dataset.id);
                 // Show update toolbar.
                 handleToolbarDisplay({

@@ -49,7 +49,7 @@ const UpdateToolbar = ({ marker, id }: UpdateToolbarProps) => {
                 <ColorOptionModal
                     modal={{
                         show: true,
-                        top: toolbarPosition.top - 60,
+                        top: toolbarPosition.top - 125,
                         left: toolbarPosition.left,
                     }}
                 />
