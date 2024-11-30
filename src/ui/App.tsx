@@ -1,13 +1,19 @@
 import React from 'react';
-import { ToolbarContextProvider, ColorContextProvider } from './context';
+import {
+    ToolbarContextProvider,
+    ColorContextProvider,
+    DialogContextProvider,
+} from './context';
 import { Container } from './components';
 
 export default function App() {
     return (
         <ToolbarContextProvider>
-            <ColorContextProvider>
-                <Container />
-            </ColorContextProvider>
+            <DialogContextProvider>
+                <ColorContextProvider>
+                    <Container />
+                </ColorContextProvider>
+            </DialogContextProvider>
         </ToolbarContextProvider>
     );
 }
