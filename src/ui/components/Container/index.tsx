@@ -1,15 +1,17 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect, useContext } from 'react';
-import { CreateToolbar, UpdateToolbar } from '../';
-import { ToolbarContext } from '../../context';
+import { CreateToolbar, UpdateToolbar, Dialog } from '../';
+import { DialogContext, ToolbarContext } from '../../context';
 import Marker from '../../../marker';
 import {
     getMouseClickPosition,
     getRangeEndPosition,
     isHighlighted,
+    restoreSelection,
     shouldCloseToolbar,
 } from '../../utils';
 import '../../../style.css';
+import { Position } from '../../context/dialog/interfaces';
 
 enum ToolbarType {
     CREATE,
@@ -28,7 +30,12 @@ type DisplayToolbar = {
 const marker = new Marker();
 
 // A list of css classes of elements that should not close the toolbar when clicked.
-const KEEP_TOOLBAR_OPEN = ['color-option', 'choose-color-btn'];
+const KEEP_TOOLBAR_OPEN = [
+    'color-option',
+    'choose-color-btn',
+    'dialog',
+    'comment',
+];
 
 const Container = () => {
     const [selection, setSelection] = useState<Range>();
@@ -36,6 +43,11 @@ const Container = () => {
 
     const toolbarContext = useContext(ToolbarContext);
     const { state, methods } = toolbarContext;
+
+    const dialogContext = useContext(DialogContext);
+    const { dialogState, displayDialog, hideDialog } = dialogContext;
+
+    console.log('range: ', selection);
 
     const handleToolbarDisplay = ({
         type,
@@ -61,18 +73,31 @@ const Container = () => {
         }
     };
 
+    const handleDialogDisplay = (position: Position) => {
+        if (position) setTimeout(() => displayDialog(position), 0);
+        else
+            setTimeout(() => {
+                hideDialog();
+                setSelection(null);
+            }, 0);
+    };
+
     const captureSelection = (event: MouseEvent) => {
         const currentSelection = document.getSelection();
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
             setSelection(range);
             const positionData = getRangeEndPosition(range);
+
             // Show create toolbar.
-            handleToolbarDisplay({
-                type: ToolbarType.CREATE,
-                show: true,
-                positionData,
-            });
+            // handleToolbarDisplay({
+            //     type: ToolbarType.CREATE,
+            //     show: true,
+            //     positionData,
+            // });
+
+            // Show dialog
+            handleDialogDisplay(positionData);
         } else {
             const target = event.target as HTMLSpanElement;
             if (!shouldCloseToolbar(KEEP_TOOLBAR_OPEN, target.classList)) {
@@ -92,15 +117,18 @@ const Container = () => {
             }
 
             // Hide both toolbars.
-            handleToolbarDisplay({
-                type: ToolbarType.UPDATE,
-                show: false,
-            });
+            // handleToolbarDisplay({
+            //     type: ToolbarType.UPDATE,
+            //     show: false,
+            // });
 
-            handleToolbarDisplay({
-                type: ToolbarType.CREATE,
-                show: false,
-            });
+            // handleToolbarDisplay({
+            //     type: ToolbarType.CREATE,
+            //     show: false,
+            // });
+
+            // hide dialog
+            hideDialog();
         }
     };
 
@@ -114,8 +142,8 @@ const Container = () => {
 
     return (
         <>
-            {state.create.show ? (
-                <CreateToolbar marker={marker} range={selection} />
+            {dialogState.show ? (
+                <Dialog marker={marker} range={selection} />
             ) : null}
             {state.update.show ? (
                 <UpdateToolbar marker={marker} id={highlightId} />

@@ -48,8 +48,8 @@ export const getRangeEndPosition = (range: Range) => {
     const endRect = rects[rects.length - 1];
 
     return {
-        top: endRect.bottom + window.scrollY,
-        left: endRect.right + window.scrollX,
+        top: endRect.bottom + window.scrollY + 10,
+        left: endRect.left + window.scrollX,
     };
 };
 
