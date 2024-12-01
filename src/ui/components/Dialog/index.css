@@ -4,7 +4,7 @@
     left: 0;
     z-index: 1000;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    background-color: #fff;
+    background-color: var(--color-white);
     width: 400px;
     height: 180px;
 }
@@ -16,7 +16,7 @@
     padding: 10px;
     outline: none;
     border: none;
-    border-bottom: 0.5px solid rgb(194, 193, 193);
+    border-bottom: 0.5px solid var(--color-light-grey);
 }
 
 .dialog__buttons {
@@ -27,14 +27,23 @@
     height: 30%;
 }
 
+.dialog__buttons > [role='button'] {
+    cursor: pointer;
+    text-align: center;
+}
+
 .dialog__buttons > button {
     cursor: pointer;
+    text-align: center;
 }
 
 .button--delete {
     margin-right: auto;
     border: none;
     padding: 8px 16px;
+    width: 54px;
+    height: 54px;
+    background-color: var(--color-white);
 }
 
 .button--close,
@@ -46,7 +55,7 @@
 
 .button--add {
     background-color: var(--color-blue-11);
-    color: #fff;
+    color: var(--color-white);
     outline: 1px solid var(--color-blue-11);
 }
 
@@ -58,10 +67,29 @@
 
 .button--close:hover {
     background-color: var(--color-blue-11);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .button--add:hover {
     background-color: transparent;
+    color: var(--color-blue-11);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    background-color: var(--color-light-grey);
+    color: var(--color-white);
+    outline: 1px solid var(--color-light-grey);
+}
+
+button:disabled:hover {
+    background-color: var(--color-light-grey);
+    color: var(--color-white);
+    outline: 1px solid var(--color-light-grey);
+}
+
+.button--delete > svg {
+    width: 100%;
+    height: 100%;
     color: var(--color-blue-11);
 }

@@ -9,7 +9,7 @@
     padding: 16px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: var(--color-white);
 }
 
 .highlighter-btn:hover,

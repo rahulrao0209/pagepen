@@ -1,47 +1,57 @@
-import React, { useContext, useEffect } from 'react';
-import './index.css';
+import React, { useContext, useEffect, useState } from 'react';
 import { ColorContext, DialogContext } from '../../context';
 import Marker from '../../../marker';
 import { HIGHLIGHTER_COLORS } from '../../constants';
 import { getHighlightStyles, restoreSelection } from '../../utils';
+import { Delete } from '../../icons';
+import './index.css';
 
 type DialogProps = {
     marker: Marker;
     range: Range;
+    id: string;
 };
 
-const Dialog = ({ marker, range }: DialogProps) => {
+const Dialog = ({ marker, range, id }: DialogProps) => {
+    const [note, setNote] = useState<string>();
     const dialogContext = useContext(DialogContext);
     const colorContext = useContext(ColorContext);
+
+    console.log('note: ', note);
 
     const dialogPosition = dialogContext.dialogState.position;
     const { hideDialog } = dialogContext;
     const { top, left } = dialogPosition;
     const { color } = colorContext;
 
-    console.log('Range: ', range);
-
-    const highlight = (color: HIGHLIGHTER_COLORS) => {
-        const timestamp = Date.now();
-        range?.toString().length > 0 &&
-            marker.mark(range, getHighlightStyles(color), timestamp.toString());
-
-        hideDialog();
+    const deleteHighlight = (id: string) => {
+        if (!id) return;
+        marker.unmark(id);
     };
-
-    // useEffect(() => {
-    //     if (range) restoreSelection(range);
-    // }, [colorContext.color]);
 
     return (
         <div className="dialog" style={{ top, left }}>
-            <textarea className="comment"></textarea>
+            <textarea
+                className="comment"
+                autoFocus
+                placeholder="Add note..."
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+            ></textarea>
             <div className="dialog__buttons">
-                <button className="button--delete">Delete</button>
-                <button className="button--close">Close</button>
+                <button className="button--delete" onClick={() => {}}>
+                    <Delete />
+                </button>
+                <button
+                    className="button--close"
+                    onClick={() => deleteHighlight(id)}
+                >
+                    Cancel
+                </button>
                 <button
                     className="button--add"
-                    onClick={() => highlight(color)}
+                    onClick={() => {}}
+                    disabled={!note}
                 >
                     Add
                 </button>

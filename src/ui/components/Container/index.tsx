@@ -1,9 +1,10 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect, useContext } from 'react';
 import { CreateToolbar, UpdateToolbar, Dialog } from '../';
-import { DialogContext, ToolbarContext } from '../../context';
+import { ColorContext, DialogContext, ToolbarContext } from '../../context';
 import Marker from '../../../marker';
 import {
+    getHighlightStyles,
     getMouseClickPosition,
     getRangeEndPosition,
     isHighlighted,
@@ -12,6 +13,7 @@ import {
 } from '../../utils';
 import '../../../style.css';
 import { Position } from '../../context/dialog/interfaces';
+import { HIGHLIGHTER_COLORS } from '../../constants';
 
 enum ToolbarType {
     CREATE,
@@ -47,8 +49,6 @@ const Container = () => {
     const dialogContext = useContext(DialogContext);
     const { dialogState, displayDialog, hideDialog } = dialogContext;
 
-    console.log('range: ', selection);
-
     const handleToolbarDisplay = ({
         type,
         show,
@@ -73,13 +73,21 @@ const Container = () => {
         }
     };
 
-    const handleDialogDisplay = (position: Position) => {
+    const handleDialogDisplay = (position?: Position) => {
         if (position) setTimeout(() => displayDialog(position), 0);
         else
             setTimeout(() => {
+                console.log('hide dialog with timeout.');
                 hideDialog();
                 setSelection(null);
             }, 0);
+    };
+
+    const highlight = (range: Range, color: HIGHLIGHTER_COLORS) => {
+        const timestamp = Date.now();
+        range?.toString().length > 0 &&
+            marker.mark(range, getHighlightStyles(color), timestamp.toString());
+        setHighlightId(timestamp.toString());
     };
 
     const captureSelection = (event: MouseEvent) => {
@@ -89,12 +97,8 @@ const Container = () => {
             setSelection(range);
             const positionData = getRangeEndPosition(range);
 
-            // Show create toolbar.
-            // handleToolbarDisplay({
-            //     type: ToolbarType.CREATE,
-            //     show: true,
-            //     positionData,
-            // });
+            // Highlight selection
+            highlight(range, HIGHLIGHTER_COLORS.INITIAL);
 
             // Show dialog
             handleDialogDisplay(positionData);
@@ -116,19 +120,8 @@ const Container = () => {
                 return;
             }
 
-            // Hide both toolbars.
-            // handleToolbarDisplay({
-            //     type: ToolbarType.UPDATE,
-            //     show: false,
-            // });
-
-            // handleToolbarDisplay({
-            //     type: ToolbarType.CREATE,
-            //     show: false,
-            // });
-
             // hide dialog
-            hideDialog();
+            handleDialogDisplay();
         }
     };
 
@@ -143,7 +136,7 @@ const Container = () => {
     return (
         <>
             {dialogState.show ? (
-                <Dialog marker={marker} range={selection} />
+                <Dialog marker={marker} range={selection} id={highlightId} />
             ) : null}
             {state.update.show ? (
                 <UpdateToolbar marker={marker} id={highlightId} />
