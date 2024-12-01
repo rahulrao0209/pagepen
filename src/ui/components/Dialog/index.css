@@ -4,7 +4,11 @@
     left: 0;
     z-index: 1000;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+<<<<<<< HEAD
     background-color: var(--color-white);
+=======
+    background-color: #fff;
+>>>>>>> 82f23f607e544623fcb402eff48bcbc1a9459472
     width: 400px;
     height: 180px;
 }
@@ -16,7 +20,11 @@
     padding: 10px;
     outline: none;
     border: none;
+<<<<<<< HEAD
     border-bottom: 0.5px solid var(--color-light-grey);
+=======
+    border-bottom: 0.5px solid rgb(194, 193, 193);
+>>>>>>> 82f23f607e544623fcb402eff48bcbc1a9459472
 }
 
 .dialog__buttons {

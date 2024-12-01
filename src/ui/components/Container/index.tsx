@@ -1,7 +1,11 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect, useContext } from 'react';
 import { CreateToolbar, UpdateToolbar, Dialog } from '../';
+<<<<<<< HEAD
 import { ColorContext, DialogContext, ToolbarContext } from '../../context';
+=======
+import { DialogContext, ToolbarContext } from '../../context';
+>>>>>>> 82f23f607e544623fcb402eff48bcbc1a9459472
 import Marker from '../../../marker';
 import {
     getHighlightStyles,
@@ -13,7 +17,10 @@ import {
 } from '../../utils';
 import '../../../style.css';
 import { Position } from '../../context/dialog/interfaces';
+<<<<<<< HEAD
 import { HIGHLIGHTER_COLORS } from '../../constants';
+=======
+>>>>>>> 82f23f607e544623fcb402eff48bcbc1a9459472
 
 enum ToolbarType {
     CREATE,
@@ -49,6 +56,11 @@ const Container = () => {
     const dialogContext = useContext(DialogContext);
     const { dialogState, displayDialog, hideDialog } = dialogContext;
 
+<<<<<<< HEAD
+=======
+    console.log('range: ', selection);
+
+>>>>>>> 82f23f607e544623fcb402eff48bcbc1a9459472
     const handleToolbarDisplay = ({
         type,
         show,
