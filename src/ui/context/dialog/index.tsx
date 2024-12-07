@@ -1,10 +1,17 @@
 import React, { createContext, PropsWithChildren, useState } from 'react';
-import { DialogContextType, DialogState, Position } from './interfaces';
+import {
+    DialogContextType,
+    DialogState,
+    DialogType,
+    Position,
+} from './interfaces';
 
 export const DialogContext = createContext<DialogContextType>(null);
 
 const initialState: DialogState = {
-    show: false,
+    type: DialogType.CREATE,
+    visible: false,
+    text: '',
     position: {
         top: 0,
         left: 0,
@@ -14,9 +21,10 @@ const initialState: DialogState = {
 export const DialogContextProvider = (props: PropsWithChildren) => {
     const [dialogState, setDialogState] = useState<DialogState>(initialState);
 
-    const displayDialog = (position: Position) => {
+    const displayDialog = (type: DialogType, position: Position) => {
         setDialogState({
-            show: true,
+            type,
+            visible: true,
             position,
         });
     };
@@ -24,7 +32,7 @@ export const DialogContextProvider = (props: PropsWithChildren) => {
     const hideDialog = () => {
         setDialogState({
             ...dialogState,
-            show: false,
+            visible: false,
         });
     };
 

@@ -1,5 +1,12 @@
+export enum DialogType {
+    CREATE,
+    UPDATE,
+}
+
 export interface DialogState {
-    show: boolean;
+    type: DialogType;
+    visible: boolean;
+    text?: string;
     position?: Position;
 }
 
@@ -10,6 +17,6 @@ export interface Position {
 
 export interface DialogContextType {
     dialogState: DialogState;
-    displayDialog: (position: Position) => void;
+    displayDialog: (type: DialogType, position: Position) => void;
     hideDialog: () => void;
 }
