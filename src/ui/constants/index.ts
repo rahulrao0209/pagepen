@@ -13,3 +13,11 @@ export enum HIGHLIGHTER_COLOR_CODES {
     GREEN = '#81b29a',
     INITIAL = '#ccc',
 }
+
+export enum TEXT {
+    ADD = 'Add',
+    UPDATE = 'Update',
+    DELETE = 'Delete',
+    CANCEL = 'Cancel',
+    BACK = 'Back',
+}

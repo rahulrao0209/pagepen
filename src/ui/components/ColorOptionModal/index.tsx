@@ -1,24 +1,11 @@
 import React, { useContext } from 'react';
-import { HIGHLIGHTER_COLORS } from '../../constants';
-import './index.css';
+import { HIGHLIGHTER_COLORS, TEXT } from '../../constants';
 import { ColorContext } from '../../context';
+import './index.css';
 
-type ColorOptionModalProps = {
-    modal: {
-        show: boolean;
-        top: number;
-        left: number;
-    };
-};
-
-const ColorOptionModal = ({ modal }: ColorOptionModalProps) => {
-    const modalPosition = {
-        top: modal.top,
-        left: modal.left,
-    };
-
+const ColorOptionModal = () => {
     const colorContext = useContext(ColorContext);
-    const { selectColor } = colorContext;
+    const { selectColor, handleDisplayColors } = colorContext;
 
     const onSelectColor = (
         event: React.MouseEvent<HTMLElement>,
@@ -34,31 +21,40 @@ const ColorOptionModal = ({ modal }: ColorOptionModalProps) => {
         <div
             className="color-option-modal"
             aria-role="dialog"
-            style={modalPosition}
             onClick={(event: React.MouseEvent<HTMLElement>) =>
                 onSelectColor(event, selectColor)
             }
         >
-            <span
-                className="color-option yellow"
-                aria-role="button"
-                data-color={HIGHLIGHTER_COLORS.YELLOW}
-            ></span>
-            <span
-                className="color-option orange"
-                aria-role="button"
-                data-color={HIGHLIGHTER_COLORS.ORANGE}
-            ></span>
-            <span
-                className="color-option pink"
-                aria-role="button"
-                data-color={HIGHLIGHTER_COLORS.PINK}
-            ></span>
-            <span
-                className="color-option green"
-                aria-role="button"
-                data-color={HIGHLIGHTER_COLORS.GREEN}
-            ></span>
+            <div className="color-options">
+                <span
+                    className="color-option yellow"
+                    aria-role="button"
+                    data-color={HIGHLIGHTER_COLORS.YELLOW}
+                ></span>
+                <span
+                    className="color-option orange"
+                    aria-role="button"
+                    data-color={HIGHLIGHTER_COLORS.ORANGE}
+                ></span>
+                <span
+                    className="color-option pink"
+                    aria-role="button"
+                    data-color={HIGHLIGHTER_COLORS.PINK}
+                ></span>
+                <span
+                    className="color-option green"
+                    aria-role="button"
+                    data-color={HIGHLIGHTER_COLORS.GREEN}
+                ></span>
+            </div>
+            <div className="color-options-back">
+                <button
+                    className="back-btn"
+                    onClick={() => handleDisplayColors(false)}
+                >
+                    {TEXT.BACK}
+                </button>
+            </div>
         </div>
     );
 };

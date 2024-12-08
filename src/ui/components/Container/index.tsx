@@ -17,6 +17,9 @@ import { HIGHLIGHTER_COLORS } from '../../constants';
 const KEEP_TOOLBAR_OPEN = [
     'color-option',
     'choose-color-btn',
+    'back-btn',
+    'button--colors',
+    'comment-area',
     'dialog',
     'comment',
 ];
@@ -59,7 +62,7 @@ const Container = () => {
             // Show dialog
             handleDialogDisplay(DialogType.CREATE, positionData);
         } else {
-            const target = event.target as HTMLSpanElement;
+            const target = event.target as HTMLSpanElement | HTMLButtonElement;
             if (!shouldCloseToolbar(KEEP_TOOLBAR_OPEN, target.classList)) {
                 return;
             }
