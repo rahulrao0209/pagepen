@@ -5,6 +5,7 @@
     z-index: 1000;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background-color: var(--color-white);
-    width: 400px;
-    height: 180px;
+    width: 280px;
+    /* height: 150px; */
+    border-radius: 8px;
 }

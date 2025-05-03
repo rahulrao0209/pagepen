@@ -5,7 +5,7 @@ interface ColorContextType {
     color: HIGHLIGHTER_COLORS;
     displayColors: boolean;
     selectColor: (color: HIGHLIGHTER_COLORS) => void;
-    handleDisplayColors: (display: boolean) => void;
+    // handleDisplayColors: (display: boolean) => void;
 }
 
 export const ColorContext = createContext<ColorContextType>(null);
@@ -20,15 +20,15 @@ export const ColorContextProvider = (props: PropsWithChildren) => {
         setColor(color);
     };
 
-    const handleDisplayColors = (display: boolean) => {
-        setDisplayColors(display);
-    };
+    // const handleDisplayColors = (display: boolean) => {
+    //     setDisplayColors(display);
+    // };
 
     const providerData = {
         color,
         displayColors,
         selectColor,
-        handleDisplayColors,
+        // handleDisplayColors,
     };
 
     return (

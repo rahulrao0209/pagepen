@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import Marker from '../../../marker';
-import { ColorContext, DialogContext } from '../../context';
+import { DialogContext } from '../../context';
 import { DialogType } from '../../context/dialog/interfaces';
 import Comment from '../Comment';
 import './index.css';
@@ -8,41 +8,41 @@ import ColorOptionModal from '../ColorOptionModal';
 
 type DialogProps = {
     marker: Marker;
+    range: Range;
+    setRange: any;
     id: string;
     dialogType: DialogType;
+    handleHighlightId: (id: string) => void;
 };
 
-const Dialog = ({ marker, id, dialogType }: DialogProps) => {
+const Dialog = ({
+    marker,
+    id,
+    dialogType,
+    range,
+    setRange,
+    handleHighlightId,
+}: DialogProps) => {
     const dialogContext = useContext(DialogContext);
-    const colorContext = useContext(ColorContext);
-
     const dialogPosition = dialogContext.dialogState.position;
     const { top, left } = dialogPosition;
 
-    const { color, displayColors } = colorContext;
-
-    // Update the highlighted node's color when a new color is chosen.
-    useEffect(() => {
-        const nodes = document.querySelectorAll(`[data-id="${id}"]`);
-        if (!nodes.length) return;
-
-        nodes.forEach((node) => {
-            node.classList.forEach((classname: string) => {
-                if (classname.includes('highlight-')) {
-                    node.classList.remove(classname);
-                    node.classList.add(`highlight-${color.toLowerCase()}`);
-                }
-            });
-        });
-    }, [color]);
-
     return (
         <div className="dialog" style={{ top, left }}>
-            {!displayColors ? (
-                <Comment marker={marker} id={id} dialogType={dialogType} />
-            ) : (
-                <ColorOptionModal />
-            )}
+            <ColorOptionModal
+                range={range}
+                setRange={setRange}
+                marker={marker}
+                id={id}
+                handleHighlightId={handleHighlightId}
+            />
+            <Comment
+                marker={marker}
+                id={id}
+                dialogType={dialogType}
+                // handleDialogId={handleDialogId}
+                range={range}
+            />
         </div>
     );
 };

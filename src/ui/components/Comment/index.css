@@ -1,7 +1,8 @@
 .comment {
-    height: 110px;
+    /* height: 110px; */
     padding: 10px;
-    border-bottom: 0.5px solid var(--color-light-grey);
+    height: 150px;
+    /* border-bottom: 0.5px solid var(--color-light-grey); */
 }
 
 .comment-area {
@@ -9,6 +10,7 @@
     outline: none;
     border: none;
     height: 100%;
+    width: 100%;
 }
 
 .dialog__buttons {
