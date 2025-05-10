@@ -9,10 +9,10 @@ import ColorOptionModal from '../ColorOptionModal';
 type DialogProps = {
     marker: Marker;
     range: Range;
-    setRange: any;
     id: string;
     dialogType: DialogType;
     handleHighlightId: (id: string) => void;
+    handleRange: (range: Range | null) => void;
 };
 
 const Dialog = ({
@@ -20,7 +20,7 @@ const Dialog = ({
     id,
     dialogType,
     range,
-    setRange,
+    handleRange,
     handleHighlightId,
 }: DialogProps) => {
     const dialogContext = useContext(DialogContext);
@@ -31,9 +31,9 @@ const Dialog = ({
         <div className="dialog" style={{ top, left }}>
             <ColorOptionModal
                 range={range}
-                setRange={setRange}
                 marker={marker}
                 id={id}
+                handleRange={handleRange}
                 handleHighlightId={handleHighlightId}
             />
             <Comment

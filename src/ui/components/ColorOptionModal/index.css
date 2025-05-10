@@ -55,4 +55,5 @@
 
 .selected {
     outline: 1px solid var(--color-blue-11);
+    outline-offset: 3px;
 }

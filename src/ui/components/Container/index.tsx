@@ -8,8 +8,8 @@ import {
     isHighlighted,
     shouldCloseToolbar,
 } from '../../utils';
-import '../../../style.css';
 import { DialogType, Position } from '../../context/dialog/interfaces';
+import '../../../style.css';
 
 // A list of css classes of elements that should not close the toolbar when clicked.
 const KEEP_TOOLBAR_OPEN = [
@@ -37,6 +37,7 @@ const Container = () => {
             setTimeout(() => {
                 hideDialog();
                 setRange(null);
+                setHighlightId('');
             }, 0);
     };
 
@@ -44,13 +45,14 @@ const Container = () => {
         setHighlightId(id);
     };
 
-    console.log('id: ', highlightId);
+    const handleRange = (range: Range | null) => {
+        setTimeout(() => setRange(range), 0);
+    };
 
     const captureSelection = (event: MouseEvent) => {
         const currentSelection = document.getSelection();
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
-            console.log('current selection: ', currentSelection.toString());
             setRange(range);
 
             const positionData = getRangeEndPosition(range);
@@ -67,8 +69,6 @@ const Container = () => {
                 const positionData = getRangeEndPosition(target);
                 setHighlightId(target.dataset.id);
 
-                console.log('is Highlighted: ');
-
                 // Show update dialog.
                 handleDialogDisplay(DialogType.UPDATE, positionData);
                 return;
@@ -76,7 +76,6 @@ const Container = () => {
 
             // Hide dialogs
             handleDialogDisplay();
-            setHighlightId('');
         }
     };
 
@@ -94,10 +93,10 @@ const Container = () => {
                 <Dialog
                     marker={marker}
                     range={range}
-                    setRange={setRange}
                     id={highlightId}
                     dialogType={dialogState.type}
                     handleHighlightId={handleHighlightId}
+                    handleRange={handleRange}
                 />
             ) : null}
         </>
