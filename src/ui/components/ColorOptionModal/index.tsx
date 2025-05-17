@@ -4,6 +4,7 @@ import useHighlight from '../../hooks/useHighlight';
 import { HIGHLIGHTER_COLORS } from '../../constants';
 import { ColorContext } from '../../context';
 import './index.css';
+import { DialogType, Position } from '../../context/dialog/interfaces';
 
 interface ColorOptionModal {
     range: Range;
@@ -11,6 +12,7 @@ interface ColorOptionModal {
     id: string;
     handleRange: (range: Range | null) => void;
     handleHighlightId: (id: string) => void;
+    handleDialogDisplay: (type?: DialogType, position?: Position) => void;
 }
 
 const ColorOptionModal = ({
@@ -19,11 +21,13 @@ const ColorOptionModal = ({
     id,
     handleRange,
     handleHighlightId,
+    handleDialogDisplay,
 }) => {
     const colorContext = useContext(ColorContext);
     const { highlight, updateHighlight, deleteHighlight } = useHighlight({
         handleHighlightId,
         handleRange,
+        handleDialogDisplay,
     });
     const { color: currentColor, selectColor } = colorContext;
 

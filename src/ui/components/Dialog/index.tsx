@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Marker from '../../../marker';
 import { DialogContext } from '../../context';
-import { DialogType } from '../../context/dialog/interfaces';
+import { DialogType, Position } from '../../context/dialog/interfaces';
 import Comment from '../Comment';
 import './index.css';
 import ColorOptionModal from '../ColorOptionModal';
@@ -13,6 +13,7 @@ type DialogProps = {
     dialogType: DialogType;
     handleHighlightId: (id: string) => void;
     handleRange: (range: Range | null) => void;
+    handleDialogDisplay: (type?: DialogType, position?: Position) => void;
 };
 
 const Dialog = ({
@@ -22,6 +23,7 @@ const Dialog = ({
     range,
     handleRange,
     handleHighlightId,
+    handleDialogDisplay,
 }: DialogProps) => {
     const dialogContext = useContext(DialogContext);
     const dialogPosition = dialogContext.dialogState.position;
@@ -35,6 +37,7 @@ const Dialog = ({
                 id={id}
                 handleRange={handleRange}
                 handleHighlightId={handleHighlightId}
+                handleDialogDisplay={handleDialogDisplay}
             />
             <Comment
                 marker={marker}

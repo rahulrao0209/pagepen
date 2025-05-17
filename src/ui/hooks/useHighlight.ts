@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import Marker from '../../marker';
+import { ColorContext } from '../context';
 import { getHighlightStyles } from '../utils';
 import { HIGHLIGHTER_COLORS } from '../constants';
-import { ColorContext } from '../context';
-import Marker from '../../marker';
 
-const useHighlight = ({ handleHighlightId, handleRange }) => {
+const useHighlight = ({
+    handleHighlightId,
+    handleRange,
+    handleDialogDisplay,
+}) => {
     const colorContext = useContext(ColorContext);
     const { selectColor } = colorContext;
 
@@ -13,7 +17,7 @@ const useHighlight = ({ handleHighlightId, handleRange }) => {
         range: Range,
         color: HIGHLIGHTER_COLORS
     ) => {
-        const timestamp = Date.now();
+        const timestamp = Date.now().toString();
         range?.toString().length > 0 &&
             marker.mark(range, getHighlightStyles(color), timestamp.toString());
 
@@ -27,6 +31,7 @@ const useHighlight = ({ handleHighlightId, handleRange }) => {
         if (!id) return;
         marker.unmark(id);
         selectColor(null);
+        handleDialogDisplay(); // close dialog
     };
 
     const updateHighlight = (id: string, color: HIGHLIGHTER_COLORS) => {

@@ -26,6 +26,7 @@ const marker = new Marker();
 
 const Container = () => {
     const [range, setRange] = useState<Range>();
+    const rangeRef = useRef<Range>(null);
     const [highlightId, setHighlightId] = useState<string>();
 
     const dialogContext = useContext(DialogContext);
@@ -54,6 +55,7 @@ const Container = () => {
         if (currentSelection && currentSelection.toString().length > 0) {
             const range = currentSelection.getRangeAt(0);
             setRange(range);
+            rangeRef.current = range;
 
             const positionData = getRangeEndPosition(range);
 
@@ -79,11 +81,23 @@ const Container = () => {
         }
     };
 
+    const redrawDialog = () => {
+        if (!rangeRef.current) return;
+        handleDialogDisplay(
+            DialogType.CREATE,
+            getRangeEndPosition(rangeRef.current)
+        );
+    };
+
     useEffect(() => {
         document.addEventListener('mouseup', captureSelection);
 
+        // TODO: Add throttling.
+        window.addEventListener('resize', redrawDialog);
+
         return () => {
             document.removeEventListener('mouseup', captureSelection);
+            window.removeEventListener('resize', redrawDialog);
         };
     }, []);
 
@@ -97,6 +111,7 @@ const Container = () => {
                     dialogType={dialogState.type}
                     handleHighlightId={handleHighlightId}
                     handleRange={handleRange}
+                    handleDialogDisplay={handleDialogDisplay}
                 />
             ) : null}
         </>
