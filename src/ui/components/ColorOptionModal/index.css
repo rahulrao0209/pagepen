@@ -19,7 +19,8 @@
     border-color: var(--color-blue-11);
 }
 
-.color-option {
+.color-option,
+.delete-option {
     width: 24px;
     height: 24px;
     border-radius: 100vw;
@@ -27,14 +28,37 @@
     transition: transform 0.2s;
 }
 
+.delete-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: 1px solid rgb(240, 65, 65);
+}
+
 .color-option:hover {
     transform: scale(1.05);
     outline: 1px solid var(--color-blue-11);
 }
 
+.delete-option:hover {
+    transform: scale(1.05);
+    outline: 1px solid rgb(245, 30, 30);
+}
+
+.delete-option:focus {
+    transform: scale(1.05);
+    outline: 1px solid rgb(245, 30, 30);
+}
+
 .color-option:active,
-.color-option:focus {
+.color-option:focus,
+.delete-option:active,
+.delete-option:focus {
     transform: scale(0.9);
+}
+
+.delete-icon {
+    color: rgb(240, 65, 65);
 }
 
 .yellow {

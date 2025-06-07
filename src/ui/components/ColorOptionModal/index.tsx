@@ -5,11 +5,13 @@ import { HIGHLIGHTER_COLORS } from '../../constants';
 import { ColorContext } from '../../context';
 import './index.css';
 import { DialogType, Position } from '../../context/dialog/interfaces';
+import { Delete } from '../../icons';
 
 interface ColorOptionModal {
     range: Range;
     marker: Marker;
     id: string;
+    dialogType: DialogType;
     handleRange: (range: Range | null) => void;
     handleHighlightId: (id: string) => void;
     handleDialogDisplay: (type?: DialogType, position?: Position) => void;
@@ -19,6 +21,7 @@ const ColorOptionModal = ({
     range,
     marker,
     id,
+    dialogType,
     handleRange,
     handleHighlightId,
     handleDialogDisplay,
@@ -42,10 +45,12 @@ const ColorOptionModal = ({
         const color = getColor(event);
         if (!color) return null;
         selectColor(color);
-        if (!range && color === currentColor)
-            return deleteHighlight(id, marker);
         if (!range) return updateHighlight(id, color);
         highlight(marker, range, color);
+    };
+
+    const handleDelete = () => {
+        return deleteHighlight(id, marker);
     };
 
     return (
@@ -91,6 +96,15 @@ const ColorOptionModal = ({
                     aria-role="button"
                     data-color={HIGHLIGHTER_COLORS.GREEN}
                 ></span>
+                {dialogType === DialogType.UPDATE ? (
+                    <span
+                        className="delete-option"
+                        aria-role="button"
+                        onClick={handleDelete}
+                    >
+                        <Delete className="delete-icon" />
+                    </span>
+                ) : null}
             </div>
         </div>
     );

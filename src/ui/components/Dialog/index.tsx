@@ -35,16 +35,17 @@ const Dialog = ({
                 range={range}
                 marker={marker}
                 id={id}
+                dialogType={dialogType}
                 handleRange={handleRange}
                 handleHighlightId={handleHighlightId}
                 handleDialogDisplay={handleDialogDisplay}
             />
             <Comment
-                marker={marker}
-                id={id}
-                dialogType={dialogType}
-                // handleDialogId={handleDialogId}
                 range={range}
+                marker={marker}
+                handleRange={handleRange}
+                handleHighlightId={handleHighlightId}
+                handleDialogDisplay={handleDialogDisplay}
             />
         </div>
     );
