@@ -57,6 +57,13 @@ export const getRangeEndPosition = (obj: HasClientRects) => {
     };
 };
 
+export const getColorFromClassName = (classList: DOMTokenList) => {
+    const list = Array.from(classList);
+    const colorClass = list.find((c) => c.includes('highlight-'));
+    const color = colorClass.toString().slice(colorClass.indexOf('-') + 1);
+    return HIGHLIGHTER_COLORS[color.toUpperCase()];
+};
+
 export const getMouseClickPosition = (event: MouseEvent) => {
     const left = event.clientX + window.scrollX;
     const top = event.clientY + window.scrollY;

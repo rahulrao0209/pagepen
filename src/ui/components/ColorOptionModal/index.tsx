@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Marker from '../../../marker';
 import useHighlight from '../../hooks/useHighlight';
 import { HIGHLIGHTER_COLORS } from '../../constants';
@@ -52,6 +52,12 @@ const ColorOptionModal = ({
     const handleDelete = () => {
         return deleteHighlight(id, marker);
     };
+
+    useEffect(() => {
+        // don't show the previously used color as selected,
+        // if a range exists; which means user has selected a new piece of text.
+        if (range) selectColor(null);
+    }, [range]);
 
     return (
         <div

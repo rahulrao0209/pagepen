@@ -1,9 +1,10 @@
 /** Script for listening for text selections */
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Dialog } from '../';
-import { DialogContext } from '../../context';
+import { ColorContext, DialogContext } from '../../context';
 import Marker from '../../../marker';
 import {
+    getColorFromClassName,
     getRangeEndPosition,
     isHighlighted,
     shouldCloseToolbar,
@@ -30,7 +31,9 @@ const Container = () => {
     const [highlightId, setHighlightId] = useState<string>();
 
     const dialogContext = useContext(DialogContext);
+    const colorContext = useContext(ColorContext);
     const { dialogState, displayDialog, hideDialog } = dialogContext;
+    const { selectColor } = colorContext;
 
     const handleDialogDisplay = (type?: DialogType, position?: Position) => {
         if (position) setTimeout(() => displayDialog(type, position), 0);
@@ -70,6 +73,10 @@ const Container = () => {
             if (isHighlighted(target)) {
                 const positionData = getRangeEndPosition(target);
                 setHighlightId(target.dataset.id);
+
+                // Update selected color to the color of the current highlighted node
+                const color = getColorFromClassName(target.classList);
+                selectColor(color);
 
                 // Show update dialog.
                 handleDialogDisplay(DialogType.UPDATE, positionData);
