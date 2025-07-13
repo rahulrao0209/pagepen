@@ -3,14 +3,13 @@ import Marker from '../../../marker';
 import { DialogContext } from '../../context';
 import { DialogType, Position } from '../../context/dialog/interfaces';
 import Comment from '../Comment';
-import './index.css';
 import ColorOptionModal from '../ColorOptionModal';
+import './index.css';
 
 type DialogProps = {
     marker: Marker;
     range: Range;
     id: string;
-    dialogType: DialogType;
     handleHighlightId: (id: string) => void;
     handleRange: (range: Range | null) => void;
     handleDialogDisplay: (type?: DialogType, position?: Position) => void;
@@ -19,7 +18,6 @@ type DialogProps = {
 const Dialog = ({
     marker,
     id,
-    dialogType,
     range,
     handleRange,
     handleHighlightId,
@@ -30,16 +28,16 @@ const Dialog = ({
     const { top, left } = dialogPosition;
 
     return (
-        <div className="dialog" style={{ top, left }}>
+        <dialog open className="dialog" style={{ top, left }}>
             <ColorOptionModal
                 range={range}
                 marker={marker}
                 id={id}
-                dialogType={dialogType}
                 handleRange={handleRange}
                 handleHighlightId={handleHighlightId}
                 handleDialogDisplay={handleDialogDisplay}
             />
+            <hr className="sep"></hr>
             <Comment
                 range={range}
                 marker={marker}
@@ -47,7 +45,7 @@ const Dialog = ({
                 handleHighlightId={handleHighlightId}
                 handleDialogDisplay={handleDialogDisplay}
             />
-        </div>
+        </dialog>
     );
 };
 

@@ -1,5 +1,4 @@
 .comment {
-    /* height: 110px; */
     padding: 10px;
     height: 150px;
     /* border-bottom: 0.5px solid var(--color-light-grey); */
@@ -73,9 +72,3 @@ button:disabled:hover {
     color: var(--color-white);
     outline: 1px solid var(--color-light-grey);
 }
-
-/* .button--delete > svg {
-    width: 100%;
-    height: 100%;
-    color: var(--color-blue-11);
-} */

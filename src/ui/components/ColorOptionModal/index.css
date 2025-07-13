@@ -15,14 +15,13 @@
     outline: none;
     border: none;
     border-radius: 8px 8px 0 0;
-    border-bottom: 3px solid;
-    border-color: var(--color-blue-11);
 }
 
 .color-option,
 .delete-option {
     width: 24px;
     height: 24px;
+    border: none;
     border-radius: 100vw;
     cursor: pointer;
     transition: transform 0.2s;
@@ -32,6 +31,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
     outline: 1px solid rgb(240, 65, 65);
 }
 
@@ -40,7 +40,7 @@
     outline: 1px solid var(--color-blue-11);
 }
 
-.delete-option:hover {
+.delete-option:hover:not(:disabled) {
     transform: scale(1.05);
     outline: 1px solid rgb(245, 30, 30);
 }

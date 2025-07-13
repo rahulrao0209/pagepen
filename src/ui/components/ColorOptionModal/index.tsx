@@ -3,9 +3,9 @@ import Marker from '../../../marker';
 import useHighlight from '../../hooks/useHighlight';
 import { HIGHLIGHTER_COLORS } from '../../constants';
 import { ColorContext } from '../../context';
-import './index.css';
 import { DialogType, Position } from '../../context/dialog/interfaces';
 import { Delete } from '../../icons';
+import './index.css';
 
 interface ColorOptionModal {
     range: Range;
@@ -21,7 +21,6 @@ const ColorOptionModal = ({
     range,
     marker,
     id,
-    dialogType,
     handleRange,
     handleHighlightId,
     handleDialogDisplay,
@@ -60,57 +59,47 @@ const ColorOptionModal = ({
     }, [range]);
 
     return (
-        <div
-            className="color-option-modal"
-            aria-role="dialog"
-            onClick={handleClick}
-        >
+        <div className="color-option-modal" onClick={handleClick}>
             <div className="color-options">
-                <span
+                <button
                     className={`color-option yellow ${
                         currentColor === HIGHLIGHTER_COLORS.YELLOW
                             ? 'selected'
                             : ''
                     }`}
-                    aria-role="button"
                     data-color={HIGHLIGHTER_COLORS.YELLOW}
-                ></span>
-                <span
+                ></button>
+                <button
                     className={`color-option orange ${
                         currentColor === HIGHLIGHTER_COLORS.ORANGE
                             ? 'selected'
                             : ''
                     }`}
-                    aria-role="button"
                     data-color={HIGHLIGHTER_COLORS.ORANGE}
-                ></span>
-                <span
+                ></button>
+                <button
                     className={`color-option pink ${
                         currentColor === HIGHLIGHTER_COLORS.PINK
                             ? 'selected'
                             : ''
                     }`}
-                    aria-role="button"
                     data-color={HIGHLIGHTER_COLORS.PINK}
-                ></span>
-                <span
+                ></button>
+                <button
                     className={`color-option green ${
                         currentColor === HIGHLIGHTER_COLORS.GREEN
                             ? 'selected'
                             : ''
                     }`}
-                    aria-role="button"
                     data-color={HIGHLIGHTER_COLORS.GREEN}
-                ></span>
-                {dialogType === DialogType.UPDATE ? (
-                    <span
-                        className="delete-option"
-                        aria-role="button"
-                        onClick={handleDelete}
-                    >
-                        <Delete className="delete-icon" />
-                    </span>
-                ) : null}
+                ></button>
+                <button
+                    className="delete-option"
+                    onClick={handleDelete}
+                    disabled={!id}
+                >
+                    <Delete className="delete-icon" />
+                </button>
             </div>
         </div>
     );

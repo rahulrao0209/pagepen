@@ -115,7 +115,6 @@ const Container = () => {
                     marker={marker}
                     range={range}
                     id={highlightId}
-                    dialogType={dialogState.type}
                     handleHighlightId={handleHighlightId}
                     handleRange={handleRange}
                     handleDialogDisplay={handleDialogDisplay}

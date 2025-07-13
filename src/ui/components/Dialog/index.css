@@ -7,5 +7,17 @@
     background-color: var(--color-white);
     width: 280px;
     /* height: 150px; */
-    border-radius: 8px;
+    /* padding: 8px; */
+    /* border: none; */
+    margin: 0;
+    padding: 0;
+    border-radius: 6px;
+    border-width: 0.25px;
+    border-color: var(--color-blue-11);
+}
+
+.sep {
+    border: none;
+    height: 1px;
+    background-color: var(--color-blue-11);
 }
